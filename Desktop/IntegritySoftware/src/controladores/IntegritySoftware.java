@@ -23,8 +23,8 @@ public class IntegritySoftware extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException ex) {
-            //Logger.getLogger(IntegritySoftware.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            Logger.getLogger(IntegritySoftware.class.getName()).log(Level.SEVERE, null, ex);
+            //System.out.println(ex.getMessage());
         }
     }
 
