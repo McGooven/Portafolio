@@ -27,10 +27,9 @@ public class AdministrativoHomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        btnCrearUsuario.setOnAction(event) -> {
         
         
-    }      
+          
     
 }
 }
