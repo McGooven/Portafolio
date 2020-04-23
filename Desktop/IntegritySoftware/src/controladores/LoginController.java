@@ -31,7 +31,7 @@ public class LoginController implements Initializable {
             try {
                 Stage newStage = new Stage();
                 FXMLLoader loader = new FXMLLoader();
-                AnchorPane root = loader.load(getClass().getResourceAsStream("/vistas/AdministradorHome.fxml"));
+                AnchorPane root = loader.load(getClass().getResourceAsStream("/vistas/CrearUsuario.fxml"));
                 Scene scene = new Scene(root);
                 newStage.setTitle("Administrador");
                 newStage.setScene(scene);
