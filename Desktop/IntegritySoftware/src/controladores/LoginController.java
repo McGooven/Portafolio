@@ -1,10 +1,8 @@
 package controladores;
 
-import controladores.AdrRol.CrearBoxController;
-import controladores.AdrRol.CrearCentroController;
-import controladores.AdrRol.EditarBoxController;
-import controladores.AdrRol.HomeAdrRolController;
-import controladores.AdvRol.HomeAdvRolController;
+import controladores.AdrRol.SedBoxManteController;
+import controladores.AdvRol.MantenedoresController;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -19,6 +17,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -29,7 +29,7 @@ public class LoginController implements Initializable {
     @FXML TextField TxtUsuario;
     @FXML PasswordField PswContrasenia;
     @FXML Button btnIngresar;
-
+    PeticionJSON jsonReader;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //cuando se obtiene algun nodo de la scene es el momento en que está 
@@ -39,96 +39,85 @@ public class LoginController implements Initializable {
         btnIngresar.setOnAction((event) -> {
             Node source        = (Node)event.getSource();
             Stage currentStage = (Stage)source.getScene().getWindow();
-            System.out.println("cerrando stage: " + currentStage.toString());
             currentStage.close();
             
             Stage newStage = new Stage();
-            System.out.println("abriendo stage: " + newStage.toString());
-            //System.out.println("if correspondiente: " + PswContrasenia.getText());
             
-            if (PswContrasenia.getText().equals("administrador")) {
+            JSONObject my= new JSONObject();
+            my.put("correo", TxtUsuario.getText());
+            my.put("password", PswContrasenia.getText());
+            PeticionJSON request = new PeticionJSON(my,"post","http://localhost:3000/api/usuario/log/");
+            request.connect();
+            boolean executed=true;
+            
+            if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(1))) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de Aministrador.
                 try {
-                    FXMLLoader loaderHome         = new FXMLLoader();
-                    loaderHome.setLocation(getClass().getResource("/vistas/AdrRol/Home.fxml"));
-                    loaderHome.load();
-                    
-                    FXMLLoader loaderCrearCent    = new FXMLLoader();
-                    loaderCrearCent.setLocation(getClass().getResource("/vistas/AdrRol/CrearCentro.fxml"));
-                    loaderCrearCent.load();
-
-                    FXMLLoader loaderCrearBox     = new FXMLLoader();
-                    loaderCrearBox.setLocation(getClass().getResource("/vistas/AdrRol/CrearBox.fxml"));
-                    loaderCrearBox.load();
-                    
-                    FXMLLoader loaderEditarBox    = new FXMLLoader();
-                    loaderEditarBox.setLocation(getClass().getResource("/vistas/AdrRol/EditarBox.fxml"));
-                    loaderEditarBox.load();
-
-                    /*FXMLLoader loaderEditarCent = new FXMLLoader();
-                    loaderEditarCent.setLocation(getClass().getResource("/vistas/AdrRol/xxxxxxxx.fxml"));
-                    loaderEditarCent.load();*/
+                    FXMLLoader loaderMantenedor = new FXMLLoader();
+                    loaderMantenedor.setLocation(getClass().getResource("/vistas/AdrRol/SedBoxMante.fxml"));
+                    loaderMantenedor.load();
                     
                     //obteniendo instancias de cada controlador de los fxml.
-                    HomeAdrRolController instanciaHome             = loaderHome.getController();
-                    CrearCentroController instanciaCrearCent       = loaderCrearCent.getController();
-                    CrearBoxController instanciaCrearBox           = loaderCrearBox.getController();
-                    EditarBoxController instanciaEditarBox         = loaderEditarBox.getController();
-                    /*EditarCentroController instanciaEditarCent   = loaderEditarCent.getController();*/
+                    SedBoxManteController instanciaMantenedor = loaderMantenedor.getController();
                     
                     //Crear la instancia StageController y agregarle las scenes del Rol Administrador.
+                    Scene scena=new Scene(loaderMantenedor.getRoot());
                     StageController stageControl= new StageController(newStage);
-                    stageControl.addScene("HomeAdr", loaderHome, new Scene(loaderHome.getRoot()));
-                    stageControl.addScene("CrearCent", loaderCrearCent, new Scene(loaderCrearCent.getRoot()));
-                    stageControl.addScene("CrearBox", loaderCrearBox, new Scene(loaderCrearBox.getRoot()));
-                    stageControl.addScene("EditarBox", loaderEditarBox, new Scene(loaderEditarBox.getRoot()));
-                    /*stageControl.addScene("EditarCent", loaderEditarCent, new Scene(loaderEditarCent.getRoot()));*/
+                    stageControl.addScene("MantenedorSedeBox", loaderMantenedor, scena);
+
                     
                     //Pasar la instancia del StageController al Controller de todas las scenes
                     //involucradas con el Rol Administrativo.
-                    instanciaHome.setStageController(stageControl);
-                    instanciaCrearCent.setStageController(stageControl);
-                    instanciaCrearBox.setStageController(stageControl);
-                    instanciaEditarBox.setStageController(stageControl);
-                    
+                    instanciaMantenedor.setStageController(stageControl);
+                    scena.getStylesheets().add("/CSS/AdministradorRol.css");
+
                     //Mostrar la scene que quieras.
-                    newStage.setTitle("Administrador - Home");
-                    stageControl.activate("HomeAdr");
+                    newStage.setTitle("Mandenedor de sedes");
+                    stageControl.activateScene("MantenedorSedeBox");
                     
                 } catch (Exception ex) {
                     Logger.getLogger(IntegritySoftware.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if (PswContrasenia.getText().equals("administrativo")) {
+            else if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(2))) {
 
                 try {
                     FXMLLoader loaderHome = new FXMLLoader();
-                    loaderHome.setLocation(getClass().getResource("/vistas/AdvRol/Home.fxml"));
+                    loaderHome.setLocation(getClass().getResource("/vistas/AdvRol/Mantenedores.fxml"));
                     loaderHome.load();
                     
-                    HomeAdvRolController instanciaHome = loaderHome.getController();
+                    MantenedoresController instanciaMantenedores = loaderHome.getController();
                     
                     StageController stageControl= new StageController(newStage);
                     stageControl.addScene("HomeAdv", loaderHome, new Scene(loaderHome.getRoot()));
                     
-                    instanciaHome.setStageController(stageControl);
+                    instanciaMantenedores.setStageController(stageControl);
                     newStage.setTitle("Administrativo - Home");
-                    stageControl.activate("HomeAdv");
+                    stageControl.activateScene("HomeAdv");
                 } catch (Exception e) {
                 }
             }
-            if (PswContrasenia.getText().toString() == "enfermero") {
+            else if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(3))) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de enfermero.
             }
-            if (PswContrasenia.getText().toString() == "medico") {
+            else if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(4))) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de medico.
             }
+            else{
+                executed=false;
+            }
             
-            //Al ser esta una nueva Stage, no es visible hasta que lo cambies manualmente(show()).
-            newStage.show();
+            //Mostrando la stage creada.
+            if (executed) {
+                newStage.show();
+            }else{
+                System.out.println("No se encontro su usario");
+                newStage.close();
+            }
+
         });
     }    
 }
