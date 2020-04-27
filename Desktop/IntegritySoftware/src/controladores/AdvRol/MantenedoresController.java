@@ -11,16 +11,26 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
  *
  * @author Grupo x
  */
-public class HomeAdvRolController implements Initializable {
+public class MantenedoresController implements Initializable {
     StageController stageController;
-    @FXML
-    private Button btnCrearUsuario,btnReportarInsumo,btnModificarUsuario,btnModificarInsumo;
+    
+    @FXML private Pane panContMantenedores,panContInfoUsuario;
+    @FXML private GridPane grdPContMantUsuario;
+    @FXML private TableView<?> tbvMantUsuario;
+    @FXML private Button btnGuardar,btnCancelar,btnSalir;
+    @FXML private TextField txtBuscadorUsuario;
+    @FXML private Label lblUsuario,lblStockInsumo,lblReporteInsumos;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

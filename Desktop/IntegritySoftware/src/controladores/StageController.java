@@ -5,9 +5,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.Pane;
 
 /**
  * Clase para "almacenar" las scene de una Stage (JavaFX)
@@ -16,7 +16,8 @@ import javafx.fxml.FXMLLoader;
  */
 public class StageController {
     private HashMap<String, FXMLLoader> loaderMap = new HashMap<>();
-    private HashMap<String, Scene> sceneMap = new HashMap<>();
+    private HashMap<String, Scene> sceneMap       = new HashMap<>();
+    private HashMap<String, Pane> fxmlMap         = new HashMap<>();
     private Stage mainStage;
 
     /**
@@ -40,20 +41,29 @@ public class StageController {
         this.loaderMap.put(name, loader);
         this.sceneMap.put(name,scene);       
     }
+    
+    public void addContent(String name, String fxmlPath) throws IOException{
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
+        this.fxmlMap.put(name,loader.load());
+    }
 
     /**
      * Funcion para cambiar de scene identificada por un nombre.
      * @param name indentificador de la scene
      */
     public void changeScene(String name){
-        this.activate(name);
+        this.activateScene(name);
     }
-
+    
+    public void changeContent(Pane parentNode,String content){
+        parentNode.getChildren().setAll((Pane)this.fxmlMap.get(content));
+    }
+    
     /**
      * Mostrar una scene identificada por su nombre.
      * @param name nombre de la scene guardada en esta instancia de StageController.
      */
-    public void activate(String name){  
+    public void activateScene(String name){  
         this.mainStage.setScene(this.sceneMap.get(name));
     }
     
