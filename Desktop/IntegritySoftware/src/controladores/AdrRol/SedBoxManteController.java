@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import controladores.PeticionJSON;
+import javafx.scene.control.TableColumn;
 import org.json.JSONObject;
 
 /**
@@ -22,8 +23,9 @@ public class SedBoxManteController implements Initializable {
     StageController stageController;
     
     @FXML private ListView<?> ltvSedes;
-    @FXML private Button btnConfirmar,btnLimpiar;
+    @FXML private Button btnConfirmar,btnLimpiar,btnCrearSede,btnEditarSede;
     @FXML private TableView<?> tbvBoxesSede;
+    @FXML private TableColumn<?, ?> colId, colEstado, colHabilitada;
     @FXML private Pane panSedeCardContainer;
     @FXML private TextField txtFRegSede,txtFCiuSede,txtFCalleSede,txtFAnomSede;
 
