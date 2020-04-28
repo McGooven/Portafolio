@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="625.0" prefWidth="216.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdvRol.PacienteFormController">
+
+   <children>
+      <Label layoutX="14.0" layoutY="5.0" text="Correo:" />
+      <TextField fx:id="txtCorreo" layoutX="14.0" layoutY="25.0" prefHeight="26.0" prefWidth="216.0" />
+      <Label layoutX="14.0" layoutY="55.0" text="Id Ficha:" />
+      <TextField fx:id="txtidFicha" layoutX="14.0" layoutY="75.0" prefHeight="26.0" prefWidth="216.0" />
+      <Label layoutX="14.0" layoutY="105.0" prefHeight="18.0" prefWidth="50.0" text="Etapa:" />
+      <TextField fx:id="txtEtapa" layoutX="14.0" layoutY="125.0" prefHeight="26.0" prefWidth="216.0" />
+      <Label layoutX="14.0" layoutY="155.0" prefHeight="18.0" prefWidth="47.0" text="Centro:" />
+      <Label layoutX="14.0" layoutY="205.0" prefHeight="18.0" prefWidth="95.0" text="1º Nombre" />
+      <TextField fx:id="txtPrimerNombre" layoutX="14.0" layoutY="225.0" prefHeight="26.0" prefWidth="95.0" />
+      <Label layoutX="135.0" layoutY="205.0" prefHeight="18.0" prefWidth="117.0" text="2º Nombre" />
+      <TextField fx:id="txtSegundoNombre" layoutX="135.0" layoutY="225.0" prefHeight="26.0" prefWidth="95.0" />
+      <ComboBox fx:id="cmbCentro" layoutX="14.0" layoutY="175.0" prefHeight="28.0" prefWidth="216.0" />
+      <Label layoutX="14.0" layoutY="255.0" prefHeight="18.0" prefWidth="83.0" text="1º Apellido" />
+      <TextField fx:id="txtPrimerApellido" layoutX="14.0" layoutY="275.0" prefHeight="26.0" prefWidth="95.0" />
+      <Label layoutX="135.0" layoutY="255.0" text="2º Apellido" />
+      <TextField fx:id="txtSegundoApellido" layoutX="135.0" layoutY="275.0" prefHeight="26.0" prefWidth="95.0" />
+      <Label layoutX="14.0" layoutY="305.0" text="Rut:" />
+      <TextField fx:id="txtRut" layoutX="14.0" layoutY="325.0" prefHeight="26.0" prefWidth="216.0" />
+      <Label layoutX="14.0" layoutY="355.0" prefHeight="18.0" prefWidth="136.0" text="Fecha de nacimiento:" />
+      <Label layoutX="14.0" layoutY="405.0" text="Foto:" />
+      <TextField layoutX="14.0" layoutY="425.0" prefHeight="26.0" prefWidth="216.0" />
+      <Label layoutX="14.0" layoutY="455.0" text="Región:" />
+      <Label layoutX="14.0" layoutY="505.0" text="Comuna:" />
+      <Label layoutX="14.0" layoutY="555.0" text="Calle:" />
+      <TextField fx:id="txtCalle" layoutX="14.0" layoutY="575.0" prefHeight="26.0" prefWidth="216.0" />
+      <ComboBox fx:id="cmbRegion" layoutX="14.0" layoutY="475.0" prefHeight="28.0" prefWidth="216.0" />
+      <ComboBox fx:id="cmbComuna" layoutX="14.0" layoutY="525.0" prefHeight="28.0" prefWidth="216.0" />
+      <DatePicker fx:id="dtpFechaNacimiento" layoutX="14.0" layoutY="375.0" prefHeight="26.0" prefWidth="216.0" />
+   </children>
+</AnchorPane>
