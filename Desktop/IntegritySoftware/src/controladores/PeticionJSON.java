@@ -29,7 +29,7 @@ import org.json.JSONObject;
 public class PeticionJSON {
 
     JSONObject reqBody;
-    JSONArray res;
+    public JSONArray res;
     String url;
     String method;
 
@@ -82,10 +82,10 @@ public class PeticionJSON {
                 response.append(responseLine.trim());
             }
             r=response.toString();
-            System.out.println(r);
         }
         JSONArray jsonArray = new JSONArray(r);
         this.res = jsonArray;
+        System.out.println(this.res.toString(4));
     }
     
     private void sendGET() throws MalformedURLException, IOException {
@@ -104,9 +104,9 @@ public class PeticionJSON {
                     response.append(responseLine.trim());
                 }
                 r=response.toString();
-                System.out.println(r);
                 JSONArray jsonArray = new JSONArray(r);
                 this.res = jsonArray;
+                System.out.println(this.res.toString(4));
             }
         } else {
             System.out.println("GET request not worked");

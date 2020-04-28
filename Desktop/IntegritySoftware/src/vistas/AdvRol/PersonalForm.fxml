@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="232.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdvRol.PersonalFormController">
+   <content>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="827.0" prefWidth="216.0">
+         <children>
+            <GridPane prefHeight="312.0" prefWidth="216.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.0" minWidth="7.999997615814209" prefWidth="7.999997615814209" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0000023841858" minWidth="10.0" prefWidth="200.66666412353516" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0000023841858" minWidth="1.3333358764648438" prefWidth="7.333335876464844" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <GridPane prefHeight="365.0" prefWidth="200.0" vgap="5.0" GridPane.columnIndex="1">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+                           <children>
+                              <TextField fx:id="txtId" layoutX="-2.0" layoutY="16.0" prefHeight="25.0" prefWidth="205.0" />
+                              <Label layoutX="-1.0" prefHeight="16.0" prefWidth="16.0" text="ID" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                           <children>
+                              <TextField fx:id="txtPNombre" layoutY="16.0" prefHeight="25.0" prefWidth="94.0" />
+                              <Label layoutX="-2.0" layoutY="-3.0" text="Primer nombre" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <TextField fx:id="txtSNombre" layoutX="2.0" layoutY="16.0" prefHeight="25.0" prefWidth="99.0" />
+                              <Label layoutY="-3.0" text="Segundo nombre" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                           <children>
+                              <TextField fx:id="txtPApellido" layoutX="-1.0" layoutY="16.0" prefHeight="25.0" prefWidth="94.0" />
+                              <Label layoutY="-3.0" text="1° apellido" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <TextField fx:id="txtSApellido" layoutX="4.0" layoutY="16.0" prefHeight="25.0" prefWidth="96.0" />
+                              <Label layoutY="-3.0" text="2° apellido" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                           <children>
+                              <TextField fx:id="txtRut" layoutX="-1.0" layoutY="17.0" prefHeight="25.0" prefWidth="98.0" />
+                              <Label layoutX="-1.0" layoutY="-5.0" text="Rut" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="69.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
+                           <children>
+                              <ImageView fx:id="imgFoto" fitHeight="101.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                           <children>
+                              <DatePicker fx:id="dtpFechaNacimiento" layoutY="18.0" prefHeight="25.0" prefWidth="102.0" />
+                              <Label text="Fecha nacimiento" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                           <children>
+                              <DatePicker fx:id="dtpFechaIngreso" layoutY="16.0" prefHeight="15.0" prefWidth="100.0" />
+                              <Label layoutX="-2.0" layoutY="-3.0" prefHeight="17.0" prefWidth="106.0" text="Ingreso a Edudown" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                           <children>
+                              <TextField fx:id="txtEmail" layoutY="15.0" prefHeight="26.0" prefWidth="200.0" />
+                              <Label layoutY="-3.0" text="E-mail" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+            <Separator layoutX="8.0" layoutY="337.0" prefWidth="200.0" />
+            <Label layoutX="82.0" layoutY="338.0" text="Hospedaje" />
+            <GridPane layoutX="8.0" layoutY="361.0" prefHeight="134.0" prefWidth="200.0" vgap="5.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+                     <children>
+                        <Label layoutX="-1.0" layoutY="-3.0" text="Región" />
+                        <ComboBox fx:id="cmbBRegion" layoutX="-2.0" layoutY="16.0" prefHeight="18.0" prefWidth="202.0" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                     <children>
+                        <ComboBox fx:id="cmbBComuna" layoutY="16.0" prefHeight="25.0" prefWidth="200.0" />
+                        <Label layoutY="-3.0" text="Comuna" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                     <children>
+                        <TextField fx:id="txtDireccion" layoutY="16.0" prefHeight="25.0" prefWidth="200.0" />
+                        <Label layoutY="-3.0" text="Direccion" />
+                     </children>
+                  </Pane>
+               </children>
+            </GridPane>
+            <Separator layoutX="10.0" layoutY="518.0" prefWidth="200.0" />
+            <Label layoutX="89.0" layoutY="522.0" text="Laboral" />
+            <GridPane layoutX="8.0" layoutY="544.0" prefHeight="244.0" prefWidth="200.0" vgap="7.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+                     <children>
+                        <TextField fx:id="txtTitulo" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" />
+                        <Label layoutY="-3.0" text="Título" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="txtCasaEstudio" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" />
+                        <Label layoutY="-3.0" text="Casa de estudio" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                     <children>
+                        <DatePicker fx:id="dtpFechaEgreso" layoutY="20.0" prefHeight="25.0" prefWidth="144.0" />
+                        <Label layoutY="-3.0" text="Fecha de egreso" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                     <children>
+                        <HBox layoutY="19.0" prefHeight="25.0" prefWidth="159.0">
+                           <children>
+                              <TextField fx:id="txtFilePath" prefHeight="25.0" prefWidth="104.0" />
+                              <Button fx:id="btnFileCertificado" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Archivo" />
+                           </children>
+                        </HBox>
+                        <Label layoutY="-3.0" text="Certificado" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                     <children>
+                        <ComboBox fx:id="cmbBCargo" layoutY="18.0" prefHeight="25.0" prefWidth="199.0" />
+                        <Label layoutY="-3.0" text="Cargo en Edudown" />
+                     </children>
+                  </Pane>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>

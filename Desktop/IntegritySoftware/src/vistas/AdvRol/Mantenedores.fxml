@@ -6,13 +6,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="800.0" style="-fx-background-image: Logo;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdvRol.MantenedoresController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="800.0" style="-fx-background-image: Logo;" stylesheets="@../../CSS/AdministrativoRol.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdvRol.MantenedoresController">
    <children>
       <GridPane layoutY="1.0" prefHeight="560.0" prefWidth="800.0">
          <columnConstraints>
@@ -33,8 +35,14 @@
                   <RowConstraints maxHeight="57.33333206176758" minHeight="10.0" prefHeight="34.66666793823242" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label id="titleBand" prefHeight="44.0" prefWidth="800.0" text="Administrativo" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                  <Pane id="titleBackground" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" />
+                  <Label id="titleBand" prefHeight="44.0" prefWidth="800.0" text="Administrativo" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Bodoni MT" size="24.0" />
+                     </font></Label>
+                  <Pane id="titleBackground" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+                     <children>
+                        <ImageView id="imgLogo" fitHeight="93.0" fitWidth="90.0" layoutX="29.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" />
+                     </children></Pane>
                </children>
             </GridPane>
             <GridPane GridPane.rowIndex="1">
@@ -46,7 +54,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <GridPane GridPane.columnIndex="1">
+                  <GridPane id="gridContent" GridPane.columnIndex="1">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="2.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -58,12 +66,12 @@
                       <RowConstraints maxHeight="50.333343505859375" minHeight="0.0" percentHeight="5.0" prefHeight="14.66668701171875" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Pane fx:id="panContMantenedores" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Pane id="panContent" fx:id="panContMantenedores" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <GridPane fx:id="grdPContMantUsuario" hgap="15.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="424.9999694824219" minWidth="10.0" prefWidth="394.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.3333435058594" minWidth="10.0" prefWidth="216.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.3333435058594" minWidth="10.0" prefWidth="232.0" />
                                  </columnConstraints>
                                  <rowConstraints>
                                     <RowConstraints maxHeight="116.66668701171875" minHeight="0.0" percentHeight="10.0" prefHeight="27.333343505859375" vgrow="SOMETIMES" />
@@ -73,11 +81,15 @@
                                  <children>
                                     <TableView fx:id="tbvMantUsuario" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                        <columns>
-                                          <TableColumn prefWidth="75.0" text="C1" />
-                                          <TableColumn prefWidth="75.0" text="C2" />
+                                          <TableColumn fx:id="tblCRut" prefWidth="122.0" text="Rut" />
+                                          <TableColumn fx:id="tblCNombre" prefWidth="206.0" text="Nombre" />
+                                          <TableColumn fx:id="tblCTipo" minWidth="5.0" prefWidth="65.0" text="Tipo" />
                                        </columns>
                                     </TableView>
-                                    <Pane fx:id="panContInfoUsuario" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Pane fx:id="panContInfoUsuario" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <children>
+                                          <Label layoutX="-1.0" layoutY="-2.0" prefHeight="28.0" prefWidth="216.0" />
+                                       </children></Pane>
                                     <GridPane hgap="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -114,7 +126,7 @@
                         </Pane>
                      </children>
                   </GridPane>
-                  <GridPane>
+                  <GridPane id="menuMantenedores" prefHeight="425.0" prefWidth="149.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -126,17 +138,17 @@
                         <RowConstraints maxHeight="323.0" minHeight="0.0" percentHeight="10.0" prefHeight="294.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="lblUsuario" alignment="CENTER" prefHeight="76.0" prefWidth="149.0" text="Usuario" wrapText="true">
+                        <Label fx:id="lblUsuario" alignment="CENTER" prefHeight="76.0" prefWidth="149.0" styleClass="menuItem" text="Usuario" wrapText="true">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <Label fx:id="lblStockInsumo" alignment="CENTER" prefHeight="90.0" prefWidth="149.0" text="Stock de insumos" wrapText="true" GridPane.rowIndex="1">
+                        <Label fx:id="lblStockInsumo" alignment="CENTER" prefHeight="90.0" prefWidth="149.0" styleClass="menuItem" text="Stock de insumos" wrapText="true" GridPane.rowIndex="1">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <Label fx:id="lblReporteInsumos" alignment="CENTER" prefHeight="138.0" prefWidth="149.0" text="Reporte de insumos" textAlignment="JUSTIFY" wrapText="true" GridPane.rowIndex="2">
+                        <Label fx:id="lblReporteInsumos" alignment="CENTER" prefHeight="138.0" prefWidth="149.0" styleClass="menuItem" text="Reporte de insumos" textAlignment="JUSTIFY" wrapText="true" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
