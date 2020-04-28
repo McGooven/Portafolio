@@ -1,33 +1,34 @@
-import { Column, Entity, Index, OneToOne } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { FichaPaciente } from "./FichaPaciente";
 import { Personal } from "./Personal";
 
 @Index("USUARIO_PK", ["idUsuario"], { unique: true })
 @Entity("USUARIO")
 export class Usuario {
-  @Column("number", { name: "TIPO_USUARIO", precision: 1, scale: 0 })
-  tipoUsuario: number;
+  @Column("char", { name: "HABILITADO", length: 1 })
+  habilitado: string;
 
-  @Column("varchar2", { name: "CORREO", length: 20 })
-  correo: string;
+  @Column("number", { primary: true, name: "ID_USUARIO" })
+  idUsuario: number;
+
+  @Column("number", { name: "PERMISOS" })
+  permisos: number;
 
   @Column("varchar2", { name: "PASSWORD", length: 12 })
   password: string;
 
-  @Column("number", {
-    primary: true,
-    name: "ID_USUARIO",
-    precision: 6,
-    scale: 0,
-  })
-  idUsuario: number;
+  @Column("varchar2", { name: "CORREO", length: 50 })
+  correo: string;
 
-  @OneToOne(
-    () => FichaPaciente,
-    (fichaPaciente) => fichaPaciente.usuarioIdUsuario2
-  )
-  fichaPaciente: FichaPaciente;
+  @ManyToOne(() => FichaPaciente, (fichaPaciente) => fichaPaciente.usuarios)
+  @JoinColumn([
+    { name: "FICHA_PACIENTE_ID_FICHA", referencedColumnName: "idFicha" },
+  ])
+  fichaPacienteIdFicha: FichaPaciente;
 
-  @OneToOne(() => Personal, (personal) => personal.usuarioIdUsuario2)
-  personal: Personal;
+  @ManyToOne(() => Personal, (personal) => personal.usuarios)
+  @JoinColumn([
+    { name: "PERSONAL_ID_PERSONAL", referencedColumnName: "idPersonal" },
+  ])
+  personalIdPersonal: Personal;
 }

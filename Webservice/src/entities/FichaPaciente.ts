@@ -3,46 +3,62 @@ import {
   Entity,
   Index,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
 } from "typeorm";
 import { Atencion } from "./Atencion";
 import { Centro } from "./Centro";
+import { Direccion } from "./Direccion";
 import { Usuario } from "./Usuario";
 
-@Index("FICHA_PACIENTE__IDX", ["usuarioIdUsuario"], { unique: true })
 @Index("FICHA_PACIENTE_PK", ["idFicha"], { unique: true })
+@Index("FP_RUT_UNIQUE", ["rutPaciente"], { unique: true })
 @Entity("FICHA_PACIENTE")
 export class FichaPaciente {
-  @Column("number", { name: "USUARIO_ID_USUARIO", precision: 6, scale: 0 })
-  usuarioIdUsuario: number;
+  @Column("varchar2", { name: "SAPELLIDO", nullable: true, length: 50 })
+  sapellido: string | null;
 
-  @Column("number", { name: "ETAPA", precision: 1, scale: 0 })
+  @Column("blob", { name: "IMAGE_PACIENTE", nullable: true })
+  imagePaciente: Buffer | null;
+
+  @Column("varchar2", { name: "SNOMBRE", nullable: true, length: 50 })
+  snombre: string | null;
+
+  @Column("varchar2", { name: "RUT_PACIENTE", unique: true, length: 15 })
+  rutPaciente: string;
+
+  @Column("number", { name: "ETAPA" })
   etapa: number;
 
-  @Column("varchar2", { name: "RUT", length: 10 })
-  rut: string;
-
-  @Column("number", { primary: true, name: "ID_FICHA", precision: 5, scale: 0 })
+  @Column("number", { primary: true, name: "ID_FICHA" })
   idFicha: number;
 
-  @Column("varchar2", { name: "PAPELLIDO", length: 20 })
-  papellido: string;
+  @Column("char", { name: "HABILITADO", length: 1 })
+  habilitado: string;
 
-  @Column("varchar2", { name: "PNOMBRE", length: 20 })
+  @Column("date", { name: "NAC_PACIENTE", nullable: true })
+  nacPaciente: Date | null;
+
+  @Column("varchar2", { name: "PNOMBRE", length: 50 })
   pnombre: string;
 
-  @OneToMany(() => Atencion, (atencion) => atencion.fichaPacienteIdFicha)
+  @Column("varchar2", { name: "PAPELLIDO", length: 50 })
+  papellido: string;
+
+  @ManyToMany(() => Atencion, (atencion) => atencion.fichaPacientes)
   atencions: Atencion[];
 
   @ManyToOne(() => Centro, (centro) => centro.fichaPacientes)
   @JoinColumn([{ name: "CENTRO_ID_CENTRO", referencedColumnName: "idCentro" }])
   centroIdCentro: Centro;
 
-  @OneToOne(() => Usuario, (usuario) => usuario.fichaPaciente)
+  @ManyToOne(() => Direccion, (direccion) => direccion.fichaPacientes)
   @JoinColumn([
-    { name: "USUARIO_ID_USUARIO", referencedColumnName: "idUsuario" },
+    { name: "DIRECCION_ID_DIRECCION", referencedColumnName: "idDireccion" },
   ])
-  usuarioIdUsuario2: Usuario;
+  direccionIdDireccion: Direccion;
+
+  @OneToMany(() => Usuario, (usuario) => usuario.fichaPacienteIdFicha)
+  usuarios: Usuario[];
 }

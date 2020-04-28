@@ -1,27 +1,33 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
 import { Box } from "./Box";
+import { Direccion } from "./Direccion";
 import { FichaPaciente } from "./FichaPaciente";
 import { Personal } from "./Personal";
 
 @Index("CENTRO_PK", ["idCentro"], { unique: true })
 @Entity("CENTRO")
 export class Centro {
-  @Column("number", { name: "CANTIDAD_BOX", precision: 2, scale: 0 })
-  cantidadBox: number;
-
-  @Column("varchar2", { name: "DIRECCION", length: 50 })
-  direccion: string;
-
-  @Column("number", {
-    primary: true,
-    name: "ID_CENTRO",
-    precision: 6,
-    scale: 0,
-  })
+  @Column("number", { primary: true, name: "ID_CENTRO" })
   idCentro: number;
+
+  @Column("varchar2", { name: "NOMBRE_SEDE", length: 100 })
+  nombreSede: string;
 
   @OneToMany(() => Box, (box) => box.centroIdCentro)
   boxes: Box[];
+
+  @ManyToOne(() => Direccion, (direccion) => direccion.centros)
+  @JoinColumn([
+    { name: "DIRECCION_ID_DIRECCION", referencedColumnName: "idDireccion" },
+  ])
+  direccionIdDireccion: Direccion;
 
   @OneToMany(
     () => FichaPaciente,
