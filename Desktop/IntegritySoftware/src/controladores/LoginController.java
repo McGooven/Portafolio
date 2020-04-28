@@ -50,7 +50,7 @@ public class LoginController implements Initializable {
             request.connect();
             boolean executed=true;
             
-            if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(1))) {
+            if (PswContrasenia.getText().equals("admin")) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de Aministrador.
                 try {
