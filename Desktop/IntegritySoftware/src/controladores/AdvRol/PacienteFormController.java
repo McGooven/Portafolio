@@ -9,9 +9,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 /**
  * FXML Controller class
  *
@@ -26,6 +28,8 @@ public class PacienteFormController implements Initializable {
     @FXML  TextField txtCorreo, txtIdFicha, txtEtapa, txtPrimerNombre, txtSegundoNombre, txtPrimerApellido, txtSegundoApellido, txtRut, txtCalle;
     @FXML  ComboBox cmbCentro, cmbRegion, cmbComuna;
     @FXML  DatePicker dmpFechaNacimiento;
+    @FXML  Button btnCargar;
+    @FXML  ImageView imgFoto;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
