@@ -42,6 +42,7 @@ import org.json.JSONPointer;
 public class MantenedoresController implements Initializable {
     StageController stageController;
     PersonalFormController controllerFxml;
+    PacienteFormController controllerFxml2;
     
     @FXML private Pane panContMantenedores,panContInfoUsuario;
     @FXML private GridPane grdPContMantUsuario;
@@ -82,8 +83,15 @@ public class MantenedoresController implements Initializable {
         tbvMantUsuario.setItems(list);
         
         tbvMantUsuario.setOnMouseClicked((MouseEvent event) -> {
-            controllerFxml =(PersonalFormController)agregarPaneles();
-            controllerFxml.setStageController(this.stageController);
+            //agregando Paneles
+            try {
+                controllerFxml = (PersonalFormController)this.stageController.addContent("FormularioPersonal", "/vistas/AdvRol/PersonalForm.fxml");
+                controllerFxml2= (PacienteFormController)this.stageController.addContent("FormularioPaciente", "/vistas/AdvRol/PacienteForm.fxml");
+                controllerFxml.setStageController(this.stageController);
+                controllerFxml2.setStageController(this.stageController);
+            } catch (IOException ex) {
+                Logger.getLogger(MantenedoresController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 int index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
@@ -91,9 +99,9 @@ public class MantenedoresController implements Initializable {
                 String t=row.tipo.getValue();
                 try{
                 ReadContext ctx = JsonPath.parse(request.res.getJSONObject(0).toString());
-                if(t.equals("Aministrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
+                if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
                     List<String> rut= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.rutPersonal");
-                    List<String> id= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].idUsuario");
+                    List<Integer> id= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].idUsuario");
                     List<String> pNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.pnombre");
                     List<String> sNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.snombre");
                     List<String> pApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.papellido");
@@ -103,7 +111,7 @@ public class MantenedoresController implements Initializable {
                     List<String> casaEstudio= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.profesions[0].casaEstudio");
                     List<String> direccion= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.direccionIdDireccion.direccion");
                     controllerFxml.setTxtRut(rut.get(0));
-                    controllerFxml.setTxtId(id.get(0));
+                    controllerFxml.setTxtId(id.get(0).toString());
                     controllerFxml.setTxtSNombre(pNombre.get(0));
                     controllerFxml.setTxtSNombre(sNombre.get(0));
                     controllerFxml.setTxtPApellido(pApellido.get(0));
@@ -112,15 +120,15 @@ public class MantenedoresController implements Initializable {
                     controllerFxml.setTxtTitulo(titulo.get(0));
                     controllerFxml.setTxtCasaEstudio(casaEstudio.get(0));
                     controllerFxml.setTxtDireccion(direccion.get(0));
+                    this.stageController.showContent(panContInfoUsuario, "FormularioPersonal");
                 }else{
-                    
+                    this.stageController.showContent(panContInfoUsuario, "FormularioPaciente");
                 }
                 }catch(Exception ex){
                     Logger.getLogger(MantenedoresController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             
-            this.stageController.showContent(panContInfoUsuario, "FormularioPersonal");
         });
         
     }    
@@ -132,6 +140,7 @@ public class MantenedoresController implements Initializable {
     private Object agregarPaneles() {
         try {
             controllerFxml = (PersonalFormController)this.stageController.addContent("FormularioPersonal", "/vistas/AdvRol/PersonalForm.fxml");
+            
         } catch (IOException ex) {
             Logger.getLogger(MantenedoresController.class.getName()).log(Level.SEVERE, null, ex);
         }
