@@ -37,30 +37,70 @@ public class PersonalFormController implements Initializable {
         cmbBRegion.setVisibleRowCount(4);
         cmbBRegion.setPromptText("Seleccione Región...");
         cmbBRegion.setEditable(true);
+        cmbBRegion.setConverter(new StringConverter<JSONObject>() {
+            @Override
+            public String toString(JSONObject object) {
+                if (object == null){return null;} 
+                
+                else {return object.getString("nombre");}
+            }
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBRegion.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        }); 
         
         cmbBComuna.setVisibleRowCount(4);
         cmbBComuna.setPromptText("Seleccione Comuna...");
         cmbBComuna.setEditable(true);
+        cmbBComuna.setConverter(new StringConverter<JSONObject>() {
+            @Override
+            public String toString(JSONObject object) {
+                if(object== null){return null;}
+                
+                else{return object.getString("nombreComuna");}
+            }
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBComuna.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        });             
         
         cmbBCargo.setVisibleRowCount(4);
         cmbBCargo.setPromptText("Seleccione Cargo...");
         cmbBCargo.setEditable(true);
+        cmbBCargo.setConverter(new StringConverter<JSONObject>() {
+            @Override
+            public String toString(JSONObject object) {
+                if (object == null) {return null;}
+                
+                else{return object.getString("nombre");}                
+            }
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBCargo.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        });
+
         
         //eventos en los comboboxes
         cmbBRegion.valueProperty().addListener((obs, oldval, newval) -> {
             if(newval != null)
-                System.out.println("Selected airport: " + newval.getString("nombre")
-                    + ". ID: " + newval.getString("idRegion"));
+                System.out.println("region seleccionada: " + newval.getString("nombre")
+                    + ". ID: " + ((Integer)newval.getInt("idRegion")).toString());
         });
         cmbBComuna.valueProperty().addListener((obs, oldval, newval) -> {
             if(newval != null)
-                System.out.println("Selected airport: " + newval.getString("nombreComuna")
-                    + ". ID: " + newval.getNumber("idComuna"));
+                System.out.println("comuna seleccionada: " + newval.getString("nombreComuna")
+                    + ". ID: " + ((Integer)newval.getNumber("idComuna")).toString());
         });
         cmbBCargo.valueProperty().addListener((obs, oldval, newval) -> {
             if(newval != null)
-                System.out.println("Selected airport: " + newval.getString("nombre")
-                    + ". ID: " + newval.getNumber("idEspecialidad"));
+                System.out.println("cargo seleccionado: " + newval.getString("nombre")
+                    + ". ID: " + ((Integer)newval.getNumber("idEspecialidad")).toString());
         });        
     }    
     
@@ -130,54 +170,18 @@ public class PersonalFormController implements Initializable {
 
     public void setCmbBRegion(ObservableList<JSONObject> list) {
         this.cmbBRegion.setItems(list);
-                
-        this.cmbBRegion.setConverter(new StringConverter<JSONObject>() {
-
-            @Override
-            public String toString(JSONObject object) {
-                return object.getString("nombre");
-            }
-
-            @Override
-            public JSONObject fromString(String string) {
-                return cmbBRegion.getItems().stream().filter(ap -> 
-                    ap.getString(string).equals(string)).findFirst().orElse(null);
-            }
-        });
+        this.cmbBRegion.setValue((JSONObject)list.get(0));
+        
     }
 
     public void setCmbBComuna(ObservableList<JSONObject> list) {
-        this.cmbBComuna.setItems(list);
-        this.cmbBComuna.setConverter(new StringConverter<JSONObject>() {
-
-            @Override
-            public String toString(JSONObject object) {
-                return object.getString("nombreComuna");
-            }
-
-            @Override
-            public JSONObject fromString(String string) {
-                return cmbBComuna.getItems().stream().filter(ap -> 
-                    ap.getString(string).equals(string)).findFirst().orElse(null);
-            }
-        });          
+        this.cmbBComuna.setItems(list); 
+        this.cmbBComuna.setValue((JSONObject)list.get(0));
     }
 
     public void setCmbBCargo(ObservableList<JSONObject> list) {
-        this.cmbBCargo.setItems(list);
-        this.cmbBCargo.setConverter(new StringConverter<JSONObject>() {
-
-            @Override
-            public String toString(JSONObject object) {
-                return object.getString("nombre");
-            }
-
-            @Override
-            public JSONObject fromString(String string) {
-                return cmbBCargo.getItems().stream().filter(ap -> 
-                    ap.getString(string).equals(string)).findFirst().orElse(null);
-            }
-        });          
+        this.cmbBCargo.setItems(list); 
+        this.cmbBCargo.setValue(((JSONObject)list.get(0)));
     }
 
     public void setBtnFileCertificado(Button btnFileCertificado) {

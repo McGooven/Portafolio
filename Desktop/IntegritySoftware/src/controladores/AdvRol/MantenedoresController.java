@@ -127,7 +127,10 @@ public class MantenedoresController implements Initializable {
                         "')].personalIdPersonal.profesions[0].fechaEgreso");
                     JSONArray regions = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion")).toString());
-                        
+                    JSONArray comuns = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.direccionIdDireccion.comunaComuna")).toString());
+                    JSONArray cargo = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.espInters[0]")).toString());                        
                     controllerFxml.setTxtRut(rut.get(0));
                     controllerFxml.setTxtId(id.get(0).toString());
                     controllerFxml.setTxtPNombre(pNombre.get(0));
@@ -145,11 +148,25 @@ public class MantenedoresController implements Initializable {
                     regions.forEach((e) -> {
                         regiones.add((JSONObject)e);
                     });
-                    controllerFxml.setCmbBRegion(regiones);
                     
+                    ObservableList<JSONObject> comunas = FXCollections.observableArrayList();
+                    comuns.forEach((e)->{
+                        comunas.add((JSONObject)e);
+                    });
+                    
+                    ObservableList<JSONObject> cargos = FXCollections.observableArrayList();
+                    cargo.forEach((e)->{
+                        cargos.add((JSONObject)e);
+                    });                    
+                    
+                    controllerFxml.setCmbBRegion(regiones);
+                    controllerFxml.setCmbBComuna(comunas);
+                    controllerFxml.setCmbBCargo(cargos);
                     
                     this.stageController.showContent(panContInfoUsuario, "FormularioPersonal");
                 }else{
+                    
+                    
                     this.stageController.showContent(panContInfoUsuario, "FormularioPaciente");
                 }
                 }catch(Exception ex){
