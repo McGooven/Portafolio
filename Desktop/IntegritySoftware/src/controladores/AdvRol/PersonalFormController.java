@@ -12,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
 import org.json.JSONObject;
 
@@ -31,6 +32,7 @@ public class PersonalFormController implements Initializable {
     @FXML private ComboBox<JSONObject> cmbBComuna;
     @FXML private ComboBox<JSONObject> cmbBCargo;
     @FXML private Button btnFileCertificado;
+    @FXML private AnchorPane AnchorParent;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -101,7 +103,9 @@ public class PersonalFormController implements Initializable {
             if(newval != null)
                 System.out.println("cargo seleccionado: " + newval.getString("nombre")
                     + ". ID: " + ((Integer)newval.getNumber("idEspecialidad")).toString());
-        });        
+        });  
+        
+        AnchorParent.setDisable(true);
     }    
     
     public void setStageController(StageController c){

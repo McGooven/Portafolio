@@ -3,6 +3,7 @@ package controladores.AdvRol;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
+import com.jayway.jsonpath.WriteContext;
 import controladores.PeticionJSON;
 import controladores.StageController;
 import java.io.IOException;
@@ -43,6 +44,9 @@ public class MantenedoresController implements Initializable {
     StageController stageController;
     PersonalFormController controllerFxml;
     PacienteFormController controllerFxml2;
+    
+    ReadContext rtx;
+    WriteContext wtx;
     
     @FXML private Pane panContMantenedores,panContInfoUsuario;
     @FXML private GridPane grdPContMantUsuario;
@@ -98,38 +102,40 @@ public class MantenedoresController implements Initializable {
                 RowUsuarios row = tbvMantUsuario.getItems().get(index);
                 String t=row.tipo.getValue();
                 try{
-                ReadContext ctx = JsonPath.parse(request.res.getJSONObject(0).toString());
+                rtx = JsonPath.parse(request.res.getJSONObject(0).toString());
+                wtx = JsonPath.parse(request.res.getJSONObject(0).getJSONArray("UsuariosObj").toString());
+                
                 if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
                     
-                    List<String> rut= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> rut= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.rutPersonal");
-                    List<Integer> id= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].idUsuario");
-                    List<String> pNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<Integer> id= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].idUsuario");
+                    List<String> pNombre= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.pnombre");
-                    List<String> sNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> sNombre= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.snombre");
-                    List<String> pApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> pApellido= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.papellido");
-                    List<String> sApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> sApellido= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.sapellido");
-                    List<String> email= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].correo");
-                    List<String> titulo= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> email= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].correo");
+                    List<String> titulo= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.profesions[0].titulo");
-                    List<String> casaEstudio= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> casaEstudio= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.profesions[0].casaEstudio");
-                    List<String> direccion= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> direccion= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.direccionIdDireccion.direccion");
-                    List<String> fecNac= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> fecNac= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.nacPersonal");
-                    List<String> fecIng= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> fecIng= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.anioIngreso");
-                    List<String> fecEgr= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    List<String> fecEgr= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.profesions[0].fechaEgreso");
-                    JSONArray regions = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    JSONArray regions = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion")).toString());
-                    JSONArray comuns = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    JSONArray comuns = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.direccionIdDireccion.comunaComuna")).toString());
-                    JSONArray cargo = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    JSONArray cargo = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.espInters[0]")).toString());                        
                     controllerFxml.setTxtRut(rut.get(0));
                     controllerFxml.setTxtId(id.get(0).toString());
@@ -158,6 +164,7 @@ public class MantenedoresController implements Initializable {
                     cargo.forEach((e)->{
                         cargos.add((JSONObject)e);
                     });                    
+                    JSONObject a= new JSONObject();
                     
                     controllerFxml.setCmbBRegion(regiones);
                     controllerFxml.setCmbBComuna(comunas);
@@ -165,7 +172,6 @@ public class MantenedoresController implements Initializable {
                     
                     this.stageController.showContent(panContInfoUsuario, "FormularioPersonal");
                 }else{
-                    
                     
                     this.stageController.showContent(panContInfoUsuario, "FormularioPaciente");
                 }
