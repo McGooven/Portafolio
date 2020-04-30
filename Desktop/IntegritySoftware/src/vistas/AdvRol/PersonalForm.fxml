@@ -53,13 +53,13 @@
                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                            <children>
                               <TextField fx:id="txtPNombre" layoutY="16.0" prefHeight="25.0" prefWidth="94.0" />
-                              <Label layoutX="-2.0" layoutY="-3.0" text="Primer nombre" />
+                              <Label layoutX="-2.0" layoutY="-3.0" text="1° nombre" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <TextField fx:id="txtSNombre" layoutX="2.0" layoutY="16.0" prefHeight="25.0" prefWidth="99.0" />
-                              <Label layoutY="-3.0" text="Segundo nombre" />
+                              <Label layoutX="1.0" layoutY="-3.0" prefHeight="17.0" prefWidth="62.0" text="2° nombre" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -71,7 +71,7 @@
                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <TextField fx:id="txtSApellido" layoutX="4.0" layoutY="16.0" prefHeight="25.0" prefWidth="96.0" />
-                              <Label layoutY="-3.0" text="2° apellido" />
+                              <Label layoutX="4.0" layoutY="-3.0" prefHeight="17.0" prefWidth="53.0" text="2° apellido" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">

@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
@@ -205,6 +206,13 @@ public class PeticionJSON {
             System.out.println("el tipo a comparar no corresponde");
         }
         return same;
+    }
+    
+    static public LocalDate parseDate(String fecha){
+        int year = Integer.parseInt(fecha.substring(0, 4));
+        int month = Integer.parseInt(fecha.substring(5, 7));
+        int day = Integer.parseInt(fecha.substring(8));
+        return LocalDate.of(year, month, day);
     }
 
 }

@@ -2,7 +2,9 @@ package controladores.AdvRol;
 
 import controladores.StageController;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +12,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.util.StringConverter;
+import org.json.JSONObject;
 
 /**
  * FXML Controller class
@@ -23,14 +27,41 @@ public class PersonalFormController implements Initializable {
     @FXML private TextField txtDireccion,txtTitulo,txtCasaEstudio,txtFilePath;
     @FXML private ImageView imgFoto;
     @FXML private DatePicker dtpFechaNacimiento,dtpFechaIngreso,dtpFechaEgreso;
-    @FXML private ComboBox<?> cmbBRegion;
-    @FXML private ComboBox<?> cmbBComuna;
-    @FXML private ComboBox<?> cmbBCargo;
+    @FXML private ComboBox<JSONObject> cmbBRegion;
+    @FXML private ComboBox<JSONObject> cmbBComuna;
+    @FXML private ComboBox<JSONObject> cmbBCargo;
     @FXML private Button btnFileCertificado;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+        cmbBRegion.setVisibleRowCount(4);
+        cmbBRegion.setPromptText("Seleccione Región...");
+        cmbBRegion.setEditable(true);
+        
+        cmbBComuna.setVisibleRowCount(4);
+        cmbBComuna.setPromptText("Seleccione Comuna...");
+        cmbBComuna.setEditable(true);
+        
+        cmbBCargo.setVisibleRowCount(4);
+        cmbBCargo.setPromptText("Seleccione Cargo...");
+        cmbBCargo.setEditable(true);
+        
+        //eventos en los comboboxes
+        cmbBRegion.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null)
+                System.out.println("Selected airport: " + newval.getString("nombre")
+                    + ". ID: " + newval.getString("idRegion"));
+        });
+        cmbBComuna.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null)
+                System.out.println("Selected airport: " + newval.getString("nombreComuna")
+                    + ". ID: " + newval.getNumber("idComuna"));
+        });
+        cmbBCargo.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null)
+                System.out.println("Selected airport: " + newval.getString("nombre")
+                    + ". ID: " + newval.getNumber("idEspecialidad"));
+        });        
     }    
     
     public void setStageController(StageController c){
@@ -85,28 +116,68 @@ public class PersonalFormController implements Initializable {
         this.imgFoto = imgFoto;
     }
 
-    public void setDtpFechaNacimiento(DatePicker dtpFechaNacimiento) {
-        this.dtpFechaNacimiento = dtpFechaNacimiento;
+    public void setDtpFechaNacimiento(LocalDate fecha) {
+        this.dtpFechaNacimiento.setValue(fecha);
     }
 
-    public void setDtpFechaIngreso(DatePicker dtpFechaIngreso) {
-        this.dtpFechaIngreso = dtpFechaIngreso;
+    public void setDtpFechaIngreso(LocalDate fecha) {
+        this.dtpFechaIngreso.setValue(fecha);
     }
 
-    public void setDtpFechaEgreso(DatePicker dtpFechaEgreso) {
-        this.dtpFechaEgreso = dtpFechaEgreso;
+    public void setDtpFechaEgreso(LocalDate fecha) {
+        this.dtpFechaEgreso.setValue(fecha);
     }
 
-    public void setCmbBRegion(ComboBox<?> cmbBRegion) {
-        this.cmbBRegion = cmbBRegion;
+    public void setCmbBRegion(ObservableList<JSONObject> list) {
+        this.cmbBRegion.setItems(list);
+                
+        this.cmbBRegion.setConverter(new StringConverter<JSONObject>() {
+
+            @Override
+            public String toString(JSONObject object) {
+                return object.getString("nombre");
+            }
+
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBRegion.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        });
     }
 
-    public void setCmbBComuna(ComboBox<?> cmbBComuna) {
-        this.cmbBComuna = cmbBComuna;
+    public void setCmbBComuna(ObservableList<JSONObject> list) {
+        this.cmbBComuna.setItems(list);
+        this.cmbBComuna.setConverter(new StringConverter<JSONObject>() {
+
+            @Override
+            public String toString(JSONObject object) {
+                return object.getString("nombreComuna");
+            }
+
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBComuna.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        });          
     }
 
-    public void setCmbBCargo(ComboBox<?> cmbBCargo) {
-        this.cmbBCargo = cmbBCargo;
+    public void setCmbBCargo(ObservableList<JSONObject> list) {
+        this.cmbBCargo.setItems(list);
+        this.cmbBCargo.setConverter(new StringConverter<JSONObject>() {
+
+            @Override
+            public String toString(JSONObject object) {
+                return object.getString("nombre");
+            }
+
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBCargo.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        });          
     }
 
     public void setBtnFileCertificado(Button btnFileCertificado) {
@@ -161,16 +232,16 @@ public class PersonalFormController implements Initializable {
         return imgFoto;
     }
 
-    public DatePicker getDtpFechaNacimiento() {
-        return dtpFechaNacimiento;
+    public LocalDate getDtpFechaNacimiento() {
+        return dtpFechaNacimiento.getValue();
     }
 
-    public DatePicker getDtpFechaIngreso() {
-        return dtpFechaIngreso;
+    public LocalDate getDtpFechaIngreso() {
+        return dtpFechaIngreso.getValue();
     }
 
-    public DatePicker getDtpFechaEgreso() {
-        return dtpFechaEgreso;
+    public LocalDate getDtpFechaEgreso() {
+        return dtpFechaEgreso.getValue();
     }
 
     public ComboBox<?> getCmbBRegion() {

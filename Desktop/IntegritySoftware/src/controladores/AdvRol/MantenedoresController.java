@@ -100,19 +100,37 @@ public class MantenedoresController implements Initializable {
                 try{
                 ReadContext ctx = JsonPath.parse(request.res.getJSONObject(0).toString());
                 if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
-                    List<String> rut= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.rutPersonal");
+                    
+                    List<String> rut= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.rutPersonal");
                     List<Integer> id= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].idUsuario");
-                    List<String> pNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.pnombre");
-                    List<String> sNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.snombre");
-                    List<String> pApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.papellido");
-                    List<String> sApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.sapellido");
+                    List<String> pNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.pnombre");
+                    List<String> sNombre= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.snombre");
+                    List<String> pApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.papellido");
+                    List<String> sApellido= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.sapellido");
                     List<String> email= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].correo");
-                    List<String> titulo= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.profesions[0].titulo");
-                    List<String> casaEstudio= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.profesions[0].casaEstudio");
-                    List<String> direccion= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].personalIdPersonal.direccionIdDireccion.direccion");
+                    List<String> titulo= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.profesions[0].titulo");
+                    List<String> casaEstudio= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.profesions[0].casaEstudio");
+                    List<String> direccion= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.direccionIdDireccion.direccion");
+                    List<String> fecNac= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.nacPersonal");
+                    List<String> fecIng= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.anioIngreso");
+                    List<String> fecEgr= ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.profesions[0].fechaEgreso");
+                    JSONArray regions = new JSONArray(((List)ctx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                        "')].personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion")).toString());
+                        
                     controllerFxml.setTxtRut(rut.get(0));
                     controllerFxml.setTxtId(id.get(0).toString());
-                    controllerFxml.setTxtSNombre(pNombre.get(0));
+                    controllerFxml.setTxtPNombre(pNombre.get(0));
                     controllerFxml.setTxtSNombre(sNombre.get(0));
                     controllerFxml.setTxtPApellido(pApellido.get(0));
                     controllerFxml.setTxtSApellido(sApellido.get(0));
@@ -120,6 +138,16 @@ public class MantenedoresController implements Initializable {
                     controllerFxml.setTxtTitulo(titulo.get(0));
                     controllerFxml.setTxtCasaEstudio(casaEstudio.get(0));
                     controllerFxml.setTxtDireccion(direccion.get(0));
+                    controllerFxml.setDtpFechaNacimiento(PeticionJSON.parseDate(fecNac.get(0)));
+                    controllerFxml.setDtpFechaIngreso(PeticionJSON.parseDate(fecIng.get(0)));
+                    controllerFxml.setDtpFechaEgreso(PeticionJSON.parseDate(fecEgr.get(0)));
+                    ObservableList<JSONObject> regiones = FXCollections.observableArrayList();
+                    regions.forEach((e) -> {
+                        regiones.add((JSONObject)e);
+                    });
+                    controllerFxml.setCmbBRegion(regiones);
+                    
+                    
                     this.stageController.showContent(panContInfoUsuario, "FormularioPersonal");
                 }else{
                     this.stageController.showContent(panContInfoUsuario, "FormularioPaciente");
