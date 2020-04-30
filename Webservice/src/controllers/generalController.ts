@@ -2,6 +2,9 @@ import {Request,Response} from 'express'
 import { getRepository, getConnection } from "typeorm";
 
 import { Usuario } from "../entities/Usuario"
+import {Centro} from "../entities/Centro"
+
+//Manejo de Mantenedor de usuarios
 
 export const getUsuarios = async (req: Request, res: Response): Promise<Response> => {
     var result=[] as any;
@@ -22,7 +25,7 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
         "CASE WHEN \"us\".permisos = 1 THEN 'Administrador'"+
         "WHEN \"us\".permisos = 2 THEN 'Administrativo' "+
         "WHEN \"us\".permisos = 3 THEN 'Enfermero' "+
-        "WHEN \"us\".permisos = 5 THEN 'Medico' "+
+        "WHEN \"us\".permisos = 4 THEN 'Medico' "+
         "ELSE 'Paciente' "+
         "END as Tipo"
     ])
@@ -88,4 +91,22 @@ export const updateUsuario = async (req: Request, res: Response): Promise<Respon
 export const deleteUsuario = async (req: Request, res: Response): Promise<Response> => {
     const usuario = await getRepository(Usuario).delete(req.params.idUsuario);
     return res.json(usuario);
+}
+
+
+//Manejo del Mantenedor de Centros
+
+export const getcentros = async (req: Request, res: Response): Promise<Response> => {
+    var result=[] as any;
+    const query = await getRepository(Centro)
+    .createQueryBuilder('c')
+    .leftJoinAndSelect('c.direccionIdDireccion','d')
+    .leftJoinAndSelect('d.comunaComuna','com')
+    .leftJoinAndSelect('com.regionIdRegion','reg')
+    ;
+
+    result.push({});
+
+    console.log(result);
+    return res.json(result);
 }
