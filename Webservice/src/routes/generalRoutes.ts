@@ -5,10 +5,10 @@ import { getEmployees } from "../controllers/HRController";
 const router = Router();
 
 router.get('/usuarios',getUsuarios);
-router.post('/usuario',crearUsuario);
+router.post('/usuario/C',crearUsuario);
 router.post('/usuario/log/',findAccount);
 router.get('/usuario/:idUsuario',getUsuario);
-router.put('/usuario/:idUsuario',updateUsuario);
+router.post('/usuario/U',updateUsuario);
 router.delete('/usuario/:idUsuario',deleteUsuario);
 
 //HR routes
