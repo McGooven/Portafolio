@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,6 +12,7 @@
 <AnchorPane id="AnchorPane" prefHeight="625.0" prefWidth="216.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdvRol.PacienteFormController">
 
    <children>
+      <ScrollPane prefHeight="631.0" prefWidth="252.0" />
       <Label layoutX="14.0" layoutY="5.0" text="Correo:" />
       <TextField fx:id="txtCorreo" layoutX="14.0" layoutY="25.0" prefHeight="26.0" prefWidth="216.0" />
       <Label layoutX="14.0" layoutY="55.0" text="Id Ficha:" />
