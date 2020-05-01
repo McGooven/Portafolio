@@ -17,7 +17,7 @@ import javafx.scene.layout.Pane;
 public class StageController {
     private HashMap<String, FXMLLoader> loaderMap = new HashMap<>();
     private HashMap<String, Scene> sceneMap       = new HashMap<>();
-    private HashMap<String, Pane> fxmlMap         = new HashMap<>();
+    private HashMap<String, Parent> fxmlMap         = new HashMap<>();
     private Stage mainStage;
 
     /**
@@ -42,9 +42,11 @@ public class StageController {
         this.sceneMap.put(name,scene);       
     }
     
-    public void addContent(String name, String fxmlPath) throws IOException{
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
-        this.fxmlMap.put(name,loader.load());
+    public Object addContent(String name, String fxmlPath) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        loader.load();
+        this.fxmlMap.put(name,(Parent)loader.getRoot());
+        return loader.getController();
     }
 
     /**
@@ -55,8 +57,8 @@ public class StageController {
         this.activateScene(name);
     }
     
-    public void changeContent(Pane parentNode,String content){
-        parentNode.getChildren().setAll((Pane)this.fxmlMap.get(content));
+    public void showContent(Pane parentNode,String content){
+        parentNode.getChildren().setAll((Parent)this.fxmlMap.get(content));
     }
     
     /**
@@ -72,5 +74,14 @@ public class StageController {
      */
     public void stageOff(){
         this.mainStage.close();
+    }
+    
+    public boolean searchForContent(String nombre){
+        boolean existe=false;
+        if(this.fxmlMap.get(nombre) != null){
+            existe = true;
+        }
+        
+        return existe;
     }
 }

@@ -50,7 +50,7 @@ public class LoginController implements Initializable {
             request.connect();
             boolean executed=true;
             
-            if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(1))) {
+            if (request.comparePrimitives((JSONObject)request.res.get(0), "permisos", new Integer(1))) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de Aministrador.
                 try {
@@ -80,8 +80,7 @@ public class LoginController implements Initializable {
                     Logger.getLogger(IntegritySoftware.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            else if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(2))) {
-
+            else if (request.comparePrimitives((JSONObject)request.res.get(0), "permisos", new Integer(2))) {
                 try {
                     FXMLLoader loaderHome = new FXMLLoader();
                     loaderHome.setLocation(getClass().getResource("/vistas/AdvRol/Mantenedores.fxml"));
@@ -96,13 +95,14 @@ public class LoginController implements Initializable {
                     newStage.setTitle("Administrativo - Home");
                     stageControl.activateScene("HomeAdv");
                 } catch (Exception e) {
+                    Logger.getLogger(IntegritySoftware.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
-            else if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(3))) {
+            else if (request.comparePrimitives((JSONObject)request.res.get(0), "permisos", new Integer(3))) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de enfermero.
             }
-            else if (request.comparePrimitives((JSONObject)request.res.get(0), "tipoUsuario", new Integer(4))) {
+            else if (request.comparePrimitives((JSONObject)request.res.get(0), "permisos", new Integer(4))) {
                 //creando los FXMLLoader de cada fxml que representa una scene
                 //en el Rol de medico.
             }

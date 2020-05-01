@@ -2,11 +2,57 @@ import {Request,Response} from 'express'
 import { getRepository, getConnection } from "typeorm";
 
 import { Usuario } from "../entities/Usuario"
+import {Centro} from "../entities/Centro"
+
+//Manejo de Mantenedor de usuarios
 
 export const getUsuarios = async (req: Request, res: Response): Promise<Response> => {
-    const usuarios = await getConnection("default").getRepository(Usuario).find();
-    console.log(usuarios);
-    return res.json(usuarios);
+    var result=[] as any;
+    const query= await getConnection("default")
+    .createQueryBuilder()
+    .from(Usuario,"us")
+    .leftJoinAndSelect("us.personalIdPersonal","per")
+    .leftJoinAndSelect("us.fichaPacienteIdFicha","fi")
+    .select([
+        "CASE WHEN \"us\".personal_Id_Personal is not null " +
+        "THEN \"per\".rut_Personal "+
+        "ELSE \"fi\".rut_Paciente "+
+        "END as rut",
+        "CASE WHEN \"us\".personal_Id_Personal is not null " +
+        "THEN \"per\".pnombre||' '||\"per\".snombre||' '||\"per\".papellido||' '||\"per\".sapellido "+
+        "ELSE \"fi\".pnombre||' '||\"fi\".snombre||' '||\"fi\".papellido||' '||\"fi\".sapellido "+
+        "END as Nombre",
+        "CASE WHEN \"us\".permisos = 1 THEN 'Administrador'"+
+        "WHEN \"us\".permisos = 2 THEN 'Administrativo' "+
+        "WHEN \"us\".permisos = 3 THEN 'Enfermero' "+
+        "WHEN \"us\".permisos = 4 THEN 'Medico' "+
+        "ELSE 'Paciente' "+
+        "END as Tipo"
+    ])
+    .getRawMany();
+
+    const query2=await getRepository(Usuario)
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.personalIdPersonal','per')
+    .leftJoinAndSelect('user.fichaPacienteIdFicha','fi')
+    .leftJoinAndSelect('per.profesions','prof')
+    .leftJoinAndSelect('per.espInters','cargos')
+    .leftJoinAndSelect('per.centroIdCentro','centPer')
+    .leftJoinAndSelect('fi.centroIdCentro','centFi')
+    .leftJoinAndSelect('per.direccionIdDireccion','dirPer')
+    .leftJoinAndSelect('fi.direccionIdDireccion','dirFi')
+    .leftJoinAndSelect('dirPer.comunaComuna','comPer')
+    .leftJoinAndSelect('dirFi.comunaComuna','comFi')
+    .leftJoinAndSelect('comPer.regionIdRegion','regPer')
+    .leftJoinAndSelect('comFi.regionIdRegion','regFi')
+    .select()
+    .getMany();
+
+
+    result.push({"rows":query,"UsuariosObj":query2});
+
+    console.log(result);
+    return res.json(result);
 }
 
 export const getUsuario = async (req: Request, res: Response): Promise<Response> => {
@@ -45,4 +91,22 @@ export const updateUsuario = async (req: Request, res: Response): Promise<Respon
 export const deleteUsuario = async (req: Request, res: Response): Promise<Response> => {
     const usuario = await getRepository(Usuario).delete(req.params.idUsuario);
     return res.json(usuario);
+}
+
+
+//Manejo del Mantenedor de Centros
+
+export const getcentros = async (req: Request, res: Response): Promise<Response> => {
+    var result=[] as any;
+    const query = await getRepository(Centro)
+    .createQueryBuilder('c')
+    .leftJoinAndSelect('c.direccionIdDireccion','d')
+    .leftJoinAndSelect('d.comunaComuna','com')
+    .leftJoinAndSelect('com.regionIdRegion','reg')
+    ;
+
+    result.push({});
+
+    console.log(result);
+    return res.json(result);
 }

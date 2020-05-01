@@ -3,48 +3,53 @@ import {
   Entity,
   Index,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
 } from "typeorm";
-import { EspInterna } from "./EspInterna";
+import { EspInter } from "./EspInter";
 import { PersoAten } from "./PersoAten";
 import { Centro } from "./Centro";
-import { Usuario } from "./Usuario";
+import { Direccion } from "./Direccion";
 import { Profesion } from "./Profesion";
+import { Usuario } from "./Usuario";
 
-@Index("PERSONAL__IDX", ["usuarioIdUsuario"], { unique: true })
 @Index("PERSONAL_PK", ["idPersonal"], { unique: true })
+@Index("P_RUT_UNIQUE", ["rutPersonal"], { unique: true })
 @Entity("PERSONAL")
 export class Personal {
-  @Column("varchar2", { name: "SNOMBRE", length: 50 })
-  snombre: string;
-
-  @Column("number", { name: "USUARIO_ID_USUARIO", precision: 6, scale: 0 })
-  usuarioIdUsuario: number;
-
-  @Column("number", {
-    primary: true,
-    name: "ID_PERSONAL",
-    precision: 12,
-    scale: 3,
-  })
-  idPersonal: number;
+  @Column("varchar2", { name: "RUT_PERSONAL", unique: true, length: 15 })
+  rutPersonal: string;
 
   @Column("varchar2", { name: "PAPELLIDO", length: 50 })
   papellido: string;
 
-  @Column("varchar2", { name: "DIRECCION", length: 50 })
-  direccion: string;
+  @Column("blob", { name: "IMAGE_PERSONAL", nullable: true })
+  imagePersonal: Buffer | null;
+
+  @Column("number", { primary: true, name: "ID_PERSONAL" })
+  idPersonal: number;
+
+  @Column("varchar2", { name: "SAPELLIDO", nullable: true, length: 50 })
+  sapellido: string | null;
+
+  @Column("date", { name: "NAC_PERSONAL", nullable: true })
+  nacPersonal: Date | null;
+
+  @Column("varchar2", { name: "SNOMBRE", nullable: true, length: 50 })
+  snombre: string | null;
+
+  @Column("char", { name: "HABILITADO", length: 2 })
+  habilitado: string;
 
   @Column("varchar2", { name: "PNOMBRE", length: 50 })
   pnombre: string;
 
-  @Column("varchar2", { name: "SAPELLIDO", length: 50 })
-  sapellido: string;
+  @Column("date", { name: "ANIO_INGRESO" })
+  anioIngreso: Date;
 
-  @OneToMany(() => EspInterna, (espInterna) => espInterna.personalIdPersonal)
-  espInternas: EspInterna[];
+  @ManyToMany(() => EspInter, (espInter) => espInter.personals)
+  espInters: EspInter[];
 
   @OneToMany(() => PersoAten, (persoAten) => persoAten.personalIdPersonal)
   persoAtens: PersoAten[];
@@ -53,12 +58,15 @@ export class Personal {
   @JoinColumn([{ name: "CENTRO_ID_CENTRO", referencedColumnName: "idCentro" }])
   centroIdCentro: Centro;
 
-  @OneToOne(() => Usuario, (usuario) => usuario.personal)
+  @ManyToOne(() => Direccion, (direccion) => direccion.personals)
   @JoinColumn([
-    { name: "USUARIO_ID_USUARIO", referencedColumnName: "idUsuario" },
+    { name: "DIRECCION_ID_DIRECCION", referencedColumnName: "idDireccion" },
   ])
-  usuarioIdUsuario2: Usuario;
+  direccionIdDireccion: Direccion;
 
   @OneToMany(() => Profesion, (profesion) => profesion.personalIdPersonal)
   profesions: Profesion[];
+
+  @OneToMany(() => Usuario, (usuario) => usuario.personalIdPersonal)
+  usuarios: Usuario[];
 }

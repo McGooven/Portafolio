@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
@@ -29,7 +30,7 @@ import org.json.JSONObject;
 public class PeticionJSON {
 
     JSONObject reqBody;
-    JSONArray res;
+    public JSONArray res;
     String url;
     String method;
 
@@ -82,10 +83,10 @@ public class PeticionJSON {
                 response.append(responseLine.trim());
             }
             r=response.toString();
-            System.out.println(r);
         }
         JSONArray jsonArray = new JSONArray(r);
         this.res = jsonArray;
+        System.out.println(this.res.toString(4));
     }
     
     private void sendGET() throws MalformedURLException, IOException {
@@ -104,9 +105,9 @@ public class PeticionJSON {
                     response.append(responseLine.trim());
                 }
                 r=response.toString();
-                System.out.println(r);
                 JSONArray jsonArray = new JSONArray(r);
                 this.res = jsonArray;
+                System.out.println(this.res.toString(4));
             }
         } else {
             System.out.println("GET request not worked");
@@ -205,6 +206,13 @@ public class PeticionJSON {
             System.out.println("el tipo a comparar no corresponde");
         }
         return same;
+    }
+    
+    static public LocalDate parseDate(String fecha){
+        int year = Integer.parseInt(fecha.substring(0, 4));
+        int month = Integer.parseInt(fecha.substring(5, 7));
+        int day = Integer.parseInt(fecha.substring(8));
+        return LocalDate.of(year, month, day);
     }
 
 }

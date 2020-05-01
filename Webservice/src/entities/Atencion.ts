@@ -9,46 +9,51 @@ import {
   OneToMany,
 } from "typeorm";
 import { Box } from "./Box";
+import { TipoSesion } from "./TipoSesion";
+import { AtenInsu } from "./AtenInsu";
 import { FichaPaciente } from "./FichaPaciente";
 import { PersoAten } from "./PersoAten";
-import { Insumo } from "./Insumo";
 
 @Index("ATENCION_PK", ["idAtencion"], { unique: true })
 @Entity("ATENCION")
 export class Atencion {
-  @Column("number", {
-    primary: true,
-    name: "ID_ATENCION",
-    precision: 10,
-    scale: 0,
-  })
+  @Column("date", { name: "FECHA_INGRESO" })
+  fechaIngreso: Date;
+
+  @Column("date", { name: "FECHA_TERMINO", nullable: true })
+  fechaTermino: Date | null;
+
+  @Column("number", { primary: true, name: "ID_ATENCION" })
   idAtencion: number;
 
-  @Column("char", { name: "VALIDA", length: 1 })
-  valida: string;
+  @Column("number", { name: "SITUACION" })
+  situacion: number;
 
   @ManyToOne(() => Box, (box) => box.atencions)
   @JoinColumn([{ name: "BOX_ID_BOX", referencedColumnName: "idBox" }])
   boxIdBox: Box;
 
-  @ManyToOne(() => FichaPaciente, (fichaPaciente) => fichaPaciente.atencions)
+  @ManyToOne(() => TipoSesion, (tipoSesion) => tipoSesion.atencions)
   @JoinColumn([
-    { name: "FICHA_PACIENTE_ID_FICHA", referencedColumnName: "idFicha" },
+    { name: "TIPO_SESION_ID_TP_SN", referencedColumnName: "idTpSn" },
   ])
-  fichaPacienteIdFicha: FichaPaciente;
+  tipoSesionIdTpSn: TipoSesion;
 
-  @OneToMany(() => PersoAten, (persoAten) => persoAten.atencionIdAtencion)
-  persoAtens: PersoAten[];
+  @OneToMany(() => AtenInsu, (atenInsu) => atenInsu.atencionIdAtencion2)
+  atenInsus: AtenInsu[];
 
-  @ManyToMany(() => Insumo, (insumo) => insumo.atencions)
+  @ManyToMany(() => FichaPaciente, (fichaPaciente) => fichaPaciente.atencions)
   @JoinTable({
-    name: "RELATION_1",
+    name: "ATEN_PAC",
     joinColumns: [
       { name: "ATENCION_ID_ATENCION", referencedColumnName: "idAtencion" },
     ],
     inverseJoinColumns: [
-      { name: "INSUMO_ID_INSUMO", referencedColumnName: "idInsumo" },
+      { name: "FICHA_PACIENTE_ID_FICHA", referencedColumnName: "idFicha" },
     ],
   })
-  insumos: Insumo[];
+  fichaPacientes: FichaPaciente[];
+
+  @OneToMany(() => PersoAten, (persoAten) => persoAten.atencionIdAtencion)
+  persoAtens: PersoAten[];
 }

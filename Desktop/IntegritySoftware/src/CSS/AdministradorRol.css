@@ -1,0 +1,22 @@
+
+
+.background {
+    -fx-background-color: #E56161;
+    
+}
+.background2 {
+    -fx-background-color: #F1DCDC;
+    
+}
+.background3 {
+    -fx-background-color: #F4F0F0;
+    
+}
+
+.label {
+    -fx-font-size: 9pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: black;
+    -fx-opacity: 0.6;
+}
+

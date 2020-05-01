@@ -12,8 +12,11 @@ import { Centro } from "./Centro";
 @Index("BOX_PK", ["idBox"], { unique: true })
 @Entity("BOX")
 export class Box {
-  @Column("number", { primary: true, name: "ID_BOX", precision: 3, scale: 0 })
+  @Column("number", { primary: true, name: "ID_BOX" })
   idBox: number;
+
+  @Column("char", { name: "HABILITADA", length: 1 })
+  habilitada: string;
 
   @Column("varchar2", { name: "ESTADO", length: 20 })
   estado: string;

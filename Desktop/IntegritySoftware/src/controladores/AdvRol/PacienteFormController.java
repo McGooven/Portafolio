@@ -5,6 +5,7 @@
  */
 package controladores.AdvRol;
 
+import controladores.StageController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -17,14 +18,11 @@ import javafx.scene.image.ImageView;
 /**
  * FXML Controller class
  *
- * @author rober
+ * @author rober,Diego
  */
 public class PacienteFormController implements Initializable {
-
-    /**
-     * Initializes the controller class.
-     * 
-     */
+    StageController stageController;
+    
     @FXML  TextField txtCorreo, txtIdFicha, txtEtapa, txtPrimerNombre, txtSegundoNombre, txtPrimerApellido, txtSegundoApellido, txtRut, txtCalle;
     @FXML  ComboBox cmbCentro, cmbRegion, cmbComuna;
     @FXML  DatePicker dmpFechaNacimiento;
@@ -38,4 +36,7 @@ public class PacienteFormController implements Initializable {
 
     }    
     
+    public void setStageController(StageController c){
+        this.stageController = c;
+    }
 }

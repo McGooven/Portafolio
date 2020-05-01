@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.StageStyle;
 
 public class IntegritySoftware extends Application {
     
@@ -21,6 +22,7 @@ public class IntegritySoftware extends Application {
             
             primaryStage.setTitle("Bienvenido");
             primaryStage.setScene(scene);
+            //primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.show();
         } catch (IOException ex) {
             Logger.getLogger(IntegritySoftware.class.getName()).log(Level.SEVERE, null, ex);

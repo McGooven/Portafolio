@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" stylesheets="@../CSS/Login.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.LoginController">
    <children>
       <GridPane hgap="10.0" layoutX="160.0" layoutY="125.0" prefHeight="275.0" prefWidth="441.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -24,7 +24,7 @@
         </rowConstraints>
          <children>
             <Label alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="47.0" text="e-mail" GridPane.halignment="RIGHT" />
-            <Button fx:id="btnIngresar" mnemonicParsing="false" text="Button" translateX="60.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="btnIngresar" mnemonicParsing="false" text="Iniciar" translateX="60.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
