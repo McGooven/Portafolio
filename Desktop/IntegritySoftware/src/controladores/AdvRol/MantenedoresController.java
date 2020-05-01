@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,6 +45,10 @@ public class MantenedoresController implements Initializable {
     StageController stageController;
     PersonalFormController controllerFxml;
     PacienteFormController controllerFxml2;
+    ObservableList<RowUsuarios> list;
+    
+    int modificando=0;
+    int creando = 0;
     
     ReadContext rtx;
     WriteContext wtx;
@@ -56,12 +61,92 @@ public class MantenedoresController implements Initializable {
     @FXML private TableColumn<RowUsuarios, String> tblCNombre;
     @FXML private TableColumn<RowUsuarios, String> tblCTipo;
     
-    @FXML private Button btnGuardar,btnCancelar,btnSalir;
+    @FXML private Button btnGuardar,btnCancelar,btnSalir,btnAgregar,btnModificar;
     @FXML private TextField txtBuscadorUsuario;
     @FXML private Label lblUsuario,lblStockInsumo,lblReporteInsumos;
+    
+    @FXML
+    void habilitarCambios(ActionEvent event) {
+        modificando=1;
+        controllerFxml.AnchorParent.setDisable(false);
+        btnModificar.setDisable(true);
+        btnGuardar.setDisable(false);
+    }
+    
+    public void tomarYcompararJsons(int i ) {
+        if(modificando == 1 && controllerFxml != null){
+            String rut = controllerFxml.getTxtRut();
+            if(rtx != null && wtx != null){
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.pnombre", controllerFxml.getTxtPNombre());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.snombre", controllerFxml.getTxtSNombre());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.papellido", controllerFxml.getTxtPApellido());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.sapellido", controllerFxml.getTxtSApellido());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.nacPersonal", controllerFxml.getDtpFechaNacimiento());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.anioIngreso", controllerFxml.getDtpFechaIngreso());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".correo", controllerFxml.getTxtEmail());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion.nombre", controllerFxml.getCmbBRegion());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.direccionIdDireccion.comunaComuna.nombreComuna", controllerFxml.getCmbBComuna());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.direccionIdDireccion.direccion", controllerFxml.getTxtDireccion());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.profesions[0].titulo", controllerFxml.getTxtTitulo());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.profesions[0].casaEstudio", controllerFxml.getTxtCasaEstudio());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.profesions[0].fechaEgreso", controllerFxml.getDtpFechaEgreso());
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.espInters[0].nombre", controllerFxml.getCmbBCargo());
+                
+                JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                    .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
+                    .toString())
+                    .getJSONObject(0);
+                JSONObject json2= new JSONArray(((List)rtx
+                    .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
+                    .toString())
+                    .getJSONObject(0);
+                System.out.println(json1);
+                System.out.println(json2);
+                
+                if(json1.similar(json2)){
+                    System.out.println("son iguales");
+                }else{
+                    System.out.println("son diferentes");
+                    PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
+                    request.connect();
+                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",request.res.getJSONObject(0).toString());
+                    rtx = JsonPath.parse(wtx.jsonString());
+                    
+                    list.set(i, new RowUsuarios(
+                        request.res.getJSONObject(1).getString("NOMBRE"),
+                        request.res.getJSONObject(1).getString("RUT"),
+                        request.res.getJSONObject(1).getString("TIPO")   
+                    ));
+                modificando =0;
+                }        
+            }
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        btnModificar.setDisable(true);
+        btnGuardar.setDisable(true);
+        btnGuardar.setOnAction((e)->{
+            int index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
+            tomarYcompararJsons(index);
+            tbvMantUsuario.refresh();
+        });
+        
         lblUsuario.setOnMouseClicked(e -> { 
             lblUsuario.getStyleClass().set(0, "menuItemSelected");
             lblStockInsumo.getStyleClass().set(0, "menuItem");
@@ -78,9 +163,9 @@ public class MantenedoresController implements Initializable {
             lblReporteInsumos.getStyleClass().set(0, "menuItemSelected");
         });
         
-        PeticionJSON request = new PeticionJSON(new JSONObject(), "GET", "http://localhost:3000/api/usuarios");
-        request.connect();
-        ObservableList<RowUsuarios> list =rellenarTablaUsuarios(request.res);
+        PeticionJSON tableRequest = new PeticionJSON(new JSONObject(), "GET", "http://localhost:3000/api/usuarios");
+        tableRequest.connect();
+        list =rellenarTablaUsuarios(tableRequest.res);
         tblCRut.setCellValueFactory(new PropertyValueFactory<>("rut"));
         tblCNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         tblCTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -89,21 +174,32 @@ public class MantenedoresController implements Initializable {
         tbvMantUsuario.setOnMouseClicked((MouseEvent event) -> {
             //agregando Paneles
             try {
-                controllerFxml = (PersonalFormController)this.stageController.addContent("FormularioPersonal", "/vistas/AdvRol/PersonalForm.fxml");
-                controllerFxml2= (PacienteFormController)this.stageController.addContent("FormularioPaciente", "/vistas/AdvRol/PacienteForm.fxml");
-                controllerFxml.setStageController(this.stageController);
-                controllerFxml2.setStageController(this.stageController);
+                if(!this.stageController.searchForContent("FormularioPersonal")){
+                    controllerFxml = (PersonalFormController)this.stageController.addContent("FormularioPersonal", "/vistas/AdvRol/PersonalForm.fxml");
+                    controllerFxml.setStageController(this.stageController);
+                }else{ controllerFxml.AnchorParent.setDisable(true);}
+                if(!this.stageController.searchForContent("FormularioPaciente")){
+                    controllerFxml2= (PacienteFormController)this.stageController.addContent("FormularioPaciente", "/vistas/AdvRol/PacienteForm.fxml");                    
+                    controllerFxml2.setStageController(this.stageController);
+                }else{/*controllerFxml2.AnchorParent.setDisable(true);*/}
+                
             } catch (IOException ex) {
                 Logger.getLogger(MantenedoresController.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             if (event.getButton().equals(MouseButton.PRIMARY)) {
+                btnModificar.setDisable(false);
+                btnGuardar.setDisable(true);
+                modificando=0;
                 int index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
                 RowUsuarios row = tbvMantUsuario.getItems().get(index);
                 String t=row.tipo.getValue();
                 try{
-                rtx = JsonPath.parse(request.res.getJSONObject(0).toString());
-                wtx = JsonPath.parse(request.res.getJSONObject(0).getJSONArray("UsuariosObj").toString());
+                rtx = JsonPath.parse(tableRequest.res.getJSONObject(0).toString());
+                wtx = JsonPath.parse(tableRequest.res.getJSONObject(0).toString());
+                if (event.getClickCount() == 2){
+                    btnModificar.fire();
+                }
                 
                 if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
                     
@@ -131,12 +227,15 @@ public class MantenedoresController implements Initializable {
                         "')].personalIdPersonal.anioIngreso");
                     List<String> fecEgr= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.profesions[0].fechaEgreso");
-                    JSONArray regions = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    JSONArray region = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion")).toString());
-                    JSONArray comuns = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
+                    JSONArray comuna = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.direccionIdDireccion.comunaComuna")).toString());
                     JSONArray cargo = new JSONArray(((List)rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
-                        "')].personalIdPersonal.espInters[0]")).toString());                        
+                        "')].personalIdPersonal.espInters[0]")).toString());
+                    JSONArray regions = new JSONArray(((List)rtx.read("$.regiones[*]")).toString());
+                    JSONArray comuns = new JSONArray(((List)rtx.read("$.comunas[*]")).toString());
+                    JSONArray cargos = new JSONArray(((List)rtx.read("$.cargos[*]")).toString());    
                     controllerFxml.setTxtRut(rut.get(0));
                     controllerFxml.setTxtId(id.get(0).toString());
                     controllerFxml.setTxtPNombre(pNombre.get(0));
@@ -150,25 +249,28 @@ public class MantenedoresController implements Initializable {
                     controllerFxml.setDtpFechaNacimiento(PeticionJSON.parseDate(fecNac.get(0)));
                     controllerFxml.setDtpFechaIngreso(PeticionJSON.parseDate(fecIng.get(0)));
                     controllerFxml.setDtpFechaEgreso(PeticionJSON.parseDate(fecEgr.get(0)));
-                    ObservableList<JSONObject> regiones = FXCollections.observableArrayList();
+                    ObservableList<JSONObject> listRegiones = FXCollections.observableArrayList();
                     regions.forEach((e) -> {
-                        regiones.add((JSONObject)e);
+                        listRegiones.add((JSONObject)e);
                     });
                     
-                    ObservableList<JSONObject> comunas = FXCollections.observableArrayList();
+                    ObservableList<JSONObject> listComunas = FXCollections.observableArrayList();
                     comuns.forEach((e)->{
-                        comunas.add((JSONObject)e);
+                        listComunas.add((JSONObject)e);
                     });
                     
-                    ObservableList<JSONObject> cargos = FXCollections.observableArrayList();
-                    cargo.forEach((e)->{
-                        cargos.add((JSONObject)e);
+                    ObservableList<JSONObject> listCargos = FXCollections.observableArrayList();
+                    cargos.forEach((e)->{
+                        listCargos.add((JSONObject)e);
                     });                    
-                    JSONObject a= new JSONObject();
                     
-                    controllerFxml.setCmbBRegion(regiones);
-                    controllerFxml.setCmbBComuna(comunas);
-                    controllerFxml.setCmbBCargo(cargos);
+                    controllerFxml.setCmbBRegion(listRegiones);
+                    controllerFxml.setCmbBComuna(listComunas);
+                    controllerFxml.setCmbBCargo(listCargos);
+                    
+                    controllerFxml.setRegionValue(region.getJSONObject(0));
+                    controllerFxml.setComunaValue(comuna.getJSONObject(0));
+                    controllerFxml.setCargoValue(cargo.getJSONObject(0));
                     
                     this.stageController.showContent(panContInfoUsuario, "FormularioPersonal");
                 }else{
@@ -186,16 +288,6 @@ public class MantenedoresController implements Initializable {
     
     public void setStageController(StageController c){
         this.stageController = c;
-    }
-    
-    private Object agregarPaneles() {
-        try {
-            controllerFxml = (PersonalFormController)this.stageController.addContent("FormularioPersonal", "/vistas/AdvRol/PersonalForm.fxml");
-            
-        } catch (IOException ex) {
-            Logger.getLogger(MantenedoresController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return controllerFxml;
     }
 
     private ObservableList<RowUsuarios> rellenarTablaUsuarios(JSONArray res) {

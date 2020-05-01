@@ -32,7 +32,7 @@ public class PersonalFormController implements Initializable {
     @FXML private ComboBox<JSONObject> cmbBComuna;
     @FXML private ComboBox<JSONObject> cmbBCargo;
     @FXML private Button btnFileCertificado;
-    @FXML private AnchorPane AnchorParent;
+    @FXML AnchorPane AnchorParent;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -173,19 +173,24 @@ public class PersonalFormController implements Initializable {
     }
 
     public void setCmbBRegion(ObservableList<JSONObject> list) {
-        this.cmbBRegion.setItems(list);
-        this.cmbBRegion.setValue((JSONObject)list.get(0));
-        
+        this.cmbBRegion.setItems(list);  
+    }
+    public void setRegionValue(JSONObject obj){
+        this.cmbBRegion.setValue(obj);
     }
 
     public void setCmbBComuna(ObservableList<JSONObject> list) {
         this.cmbBComuna.setItems(list); 
-        this.cmbBComuna.setValue((JSONObject)list.get(0));
+    }
+    public void setComunaValue(JSONObject obj){
+        this.cmbBComuna.setValue(obj);
     }
 
     public void setCmbBCargo(ObservableList<JSONObject> list) {
-        this.cmbBCargo.setItems(list); 
-        this.cmbBCargo.setValue(((JSONObject)list.get(0)));
+        this.cmbBCargo.setItems(list);         
+    }
+    public void setCargoValue(JSONObject obj){
+        this.cmbBCargo.setValue(obj);
     }
 
     public void setBtnFileCertificado(Button btnFileCertificado) {
@@ -240,28 +245,28 @@ public class PersonalFormController implements Initializable {
         return imgFoto;
     }
 
-    public LocalDate getDtpFechaNacimiento() {
-        return dtpFechaNacimiento.getValue();
+    public String getDtpFechaNacimiento() {
+        return dtpFechaNacimiento.getValue().toString();
     }
 
-    public LocalDate getDtpFechaIngreso() {
-        return dtpFechaIngreso.getValue();
+    public String getDtpFechaIngreso() {
+        return dtpFechaIngreso.getValue().toString();
     }
 
-    public LocalDate getDtpFechaEgreso() {
-        return dtpFechaEgreso.getValue();
+    public String getDtpFechaEgreso() {
+        return dtpFechaEgreso.getValue().toString();
     }
 
-    public ComboBox<?> getCmbBRegion() {
-        return cmbBRegion;
+    public String getCmbBRegion() {
+        return cmbBRegion.getValue().getString("nombre");
     }
 
-    public ComboBox<?> getCmbBComuna() {
-        return cmbBComuna;
+    public String getCmbBComuna() {
+        return cmbBComuna.getValue().get("nombreComuna").toString();
     }
 
-    public ComboBox<?> getCmbBCargo() {
-        return cmbBCargo;
+    public String getCmbBCargo() {
+        return cmbBCargo.getValue().getString("nombre");
     }
 
     public Button getBtnFileCertificado() {
