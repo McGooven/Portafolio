@@ -4,16 +4,16 @@
         "type": "oracle",
         "host": "localhost",
         "port": 1521,
-        "username": "test",
-        "password": "test",
-        "database": "orclpdb",
-        "schema": "test",
+        "username": "PRUEBA",
+        "password": "PRUEBA",
+        "database": "orcl",
         "logging":["query"],
         "synchronize": false,
         "entities": [
             "dist/entities/**/*.js"
         ],
-        "connectString":"(DESCRIPTION =    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))    (CONNECT_DATA =      (SERVER = DEDICATED)      (SERVICE_NAME = orclpdb)    )  )"
+        "connectString":  "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = orcl)))"
+    
     },
     {
         "name": "hrSchema",

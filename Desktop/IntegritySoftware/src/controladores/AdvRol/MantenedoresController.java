@@ -121,10 +121,12 @@ public class MantenedoresController implements Initializable {
                     System.out.println("son iguales");
                 }else{
                     System.out.println("son diferentes");
+                    
                     PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
                     request.connect();
                     wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",request.res.getJSONObject(0).toString());
                     rtx = JsonPath.parse(wtx.jsonString());
+                    System.out.println(rtx.jsonString());
                     
                     list.set(i, new RowUsuarios(
                         request.res.getJSONObject(1).getString("NOMBRE"),
@@ -207,7 +209,7 @@ public class MantenedoresController implements Initializable {
                         "')].personalIdPersonal.rutPersonal");
                     List<Integer> id= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+"')].idUsuario");
                     List<String> pNombre= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
-                        "')].personalIdPersonal.pnombre");
+                        "')].personalIdPerson2l.pnombre");
                     List<String> sNombre= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
                         "')].personalIdPersonal.snombre");
                     List<String> pApellido= rtx.read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+row.rut.getValue()+
