@@ -25,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -46,6 +47,7 @@ public class MantenedoresController implements Initializable {
     PersonalFormController controllerFxml;
     PacienteFormController controllerFxml2;
     ObservableList<RowUsuarios> list;
+    private int tipoFormulario;
     
     int modificando=0;
     int creando = 0;
@@ -67,14 +69,19 @@ public class MantenedoresController implements Initializable {
     
     @FXML
     void habilitarCambios(ActionEvent event) {
-        modificando=1;
-        controllerFxml.AnchorParent.setDisable(false);
-        btnModificar.setDisable(true);
-        btnGuardar.setDisable(false);
+        estadoModificando();
     }
     
-    public void tomarYcompararJsons(int i ) {
-        if(modificando == 1 && controllerFxml != null){
+    private void createUsuarioPersonal() {
+        if(rtx != null && wtx != null){
+            JSONArray result = new JSONArray();
+            JSONObject IUsuario = new JSONObject();
+            JSONObject TUsuario = new JSONObject();
+
+        }
+    }
+    
+    private void updateUsuarioPersonal(int i ) {
             String rut = controllerFxml.getTxtRut();
             if(rtx != null && wtx != null){
                 wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
@@ -125,7 +132,7 @@ public class MantenedoresController implements Initializable {
                     PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
                     request.connect();
                     wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
-                           new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
+                            new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
                     rtx = JsonPath.parse(wtx.jsonString());
                     System.out.println(rtx.jsonString());
                     
@@ -134,20 +141,41 @@ public class MantenedoresController implements Initializable {
                         request.res.getJSONObject(1).getString("RUT"),
                         request.res.getJSONObject(1).getString("TIPO")   
                     ));
-                modificando =0;
                 }        
             }
-        }
+        
     }
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        btnModificar.setDisable(true);
-        btnGuardar.setDisable(true);
+        estadoVacío();
+        //btnModificar ejecuta "habilitarCambios()"
         btnGuardar.setOnAction((e)->{
             int index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
-            tomarYcompararJsons(index);
-            tbvMantUsuario.refresh();
+            if(tipoFormulario == 1){
+                if(modificando == 1 && controllerFxml != null){
+                    //para modificar usuario personal
+                    updateUsuarioPersonal(index);
+                    tbvMantUsuario.refresh();
+                    estadoVacío();
+                }
+                if(creando == 1 && controllerFxml != null){
+                    //para crear usuario personal
+                    createUsuarioPersonal();
+                    tbvMantUsuario.refresh();
+                    estadoVacío();
+                }
+            }else{
+                //para pacientes
+            }
+
+        });
+        btnAgregar.setOnAction((e)->{
+            estadoCreando();
+        });
+        btnCancelar.setOnAction((e) -> {
+            estadoVacío();
         });
         
         lblUsuario.setOnMouseClicked(e -> { 
@@ -174,6 +202,9 @@ public class MantenedoresController implements Initializable {
         tblCTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         tbvMantUsuario.setItems(list);
         
+        rtx = JsonPath.parse(tableRequest.res.getJSONObject(0).toString());
+        wtx = JsonPath.parse(tableRequest.res.getJSONObject(0).toString());
+        
         tbvMantUsuario.setOnMouseClicked((MouseEvent event) -> {
             //agregando Paneles
             try {
@@ -193,13 +224,18 @@ public class MantenedoresController implements Initializable {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 btnModificar.setDisable(false);
                 btnGuardar.setDisable(true);
+                btnCancelar.setDisable(true);
                 modificando=0;
                 int index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
                 RowUsuarios row = tbvMantUsuario.getItems().get(index);
                 String t=row.tipo.getValue();
+                if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
+                    tipoFormulario=1;
+                }else{
+                    tipoFormulario=2;
+                }
+                
                 try{
-                rtx = JsonPath.parse(tableRequest.res.getJSONObject(0).toString());
-                wtx = JsonPath.parse(tableRequest.res.getJSONObject(0).toString());
                 if (event.getClickCount() == 2){
                     btnModificar.fire();
                 }
@@ -303,6 +339,58 @@ public class MantenedoresController implements Initializable {
             result.add(new RowUsuarios((String)user.get("NOMBRE"),(String)user.get("RUT"),(String)user.get("TIPO")));
         });
         return result;
+    }
+    //estados de los formularios
+    public void estadoVacío(){
+        if(modificando > 0 || creando > 0){
+            if(tipoFormulario == 1){
+                controllerFxml.AnchorParent.setDisable(true);
+            }else{
+                controllerFxml2.AnchorParent.setDisable(true);
+            }
+        }
+        modificando=0;
+        creando=0;
+        btnAgregar.setDisable(false);
+        btnModificar.setDisable(true);
+        btnGuardar.setDisable(true);
+        btnCancelar.setDisable(true);
+        tbvMantUsuario.getSelectionModel().clearSelection();
+    }
+    public void estadoSeleccionando(){
+        modificando=0;
+        creando=0;
+        btnAgregar.setDisable(false);
+        btnModificar.setDisable(false);
+        btnGuardar.setDisable(true);
+        btnCancelar.setDisable(true);
+    }
+    public void estadoModificando(){
+        modificando=1;
+        if(tipoFormulario == 1){
+            controllerFxml.AnchorParent.setDisable(false);
+        }else{
+            controllerFxml2.AnchorParent.setDisable(false);
+        }
+        btnAgregar.setDisable(true);
+        btnModificar.setDisable(true);
+        btnGuardar.setDisable(false);
+        btnCancelar.setDisable(false);
+    }
+    public void estadoCreando(){
+        creando=1;
+        btnAgregar.setDisable(true);
+        btnModificar.setDisable(true);
+        btnGuardar.setDisable(false);
+        btnCancelar.setDisable(false);
+        if(tipoFormulario == 1){
+            controllerFxml.AnchorParent.setDisable(false);
+            controllerFxml.limpiarFormulario();
+        }else{
+            controllerFxml2.AnchorParent.setDisable(true);
+            
+        }
+        tbvMantUsuario.getSelectionModel().clearSelection();
     }
     
     public static class RowUsuarios{

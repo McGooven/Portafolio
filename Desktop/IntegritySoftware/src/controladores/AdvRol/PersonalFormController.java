@@ -107,6 +107,26 @@ public class PersonalFormController implements Initializable {
         
         AnchorParent.setDisable(true);
     }    
+    public void limpiarFormulario(){
+        this.txtId.clear();
+        this.txtPNombre.clear();
+        this.txtSNombre.clear();
+        this.txtPApellido.clear();
+        this.txtSApellido.clear();
+        this.txtRut.clear();
+        this.txtEmail.clear();
+        this.txtDireccion.clear();
+        this.txtTitulo.clear();
+        this.txtCasaEstudio.clear();
+        this.txtFilePath.clear();
+        //this.imgFoto;
+        this.dtpFechaNacimiento.setValue(null);
+        this.dtpFechaIngreso.setValue(null);
+        this.dtpFechaEgreso.setValue(null);
+        this.cmbBRegion.getSelectionModel().clearSelection();
+        this.cmbBComuna.getSelectionModel().clearSelection();
+        this.cmbBCargo.getSelectionModel().clearSelection();
+    }
     
     public void setStageController(StageController c){
         this.stageController = c;

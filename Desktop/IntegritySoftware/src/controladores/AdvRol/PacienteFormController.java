@@ -35,7 +35,7 @@ public class PacienteFormController implements Initializable {
     @FXML private ComboBox<JSONObject> cmbComuna;
     @FXML private ComboBox<JSONObject> cmbCentro;
 
-    @FXML AnchorPane AnchorParent;
+    @FXML public AnchorPane AnchorParent;
 
     
     @Override
