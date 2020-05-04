@@ -124,7 +124,8 @@ public class MantenedoresController implements Initializable {
                     
                     PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
                     request.connect();
-                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",request.res.getJSONObject(0).toString());
+                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
+                           new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
                     rtx = JsonPath.parse(wtx.jsonString());
                     System.out.println(rtx.jsonString());
                     
