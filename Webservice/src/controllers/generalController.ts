@@ -3,6 +3,7 @@ import { getRepository, getConnection, createQueryBuilder } from "typeorm";
 
 import { Usuario } from "../entities/Usuario"
 import { Centro } from "../entities/Centro"
+import { Box } from "../entities/Box"
 import { Region } from "../entities/Region"
 import { EspInter } from "../entities/EspInter"
 import { Comuna } from "../entities/Comuna"
@@ -36,6 +37,7 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
         "ELSE 'Paciente' "+
         "END as Tipo"
     ])
+    .where("\"us\".habilitado = :h and (\"per\".habilitado = :hp or \"fi\".habilitado= :hf)",{h:'S',hp:'S ',hf:'S'})
     .getRawMany();
 
     const query2=await getRepository(Usuario)
@@ -53,6 +55,7 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
     .leftJoinAndSelect('comPer.regionIdRegion','regPer')
     .leftJoinAndSelect('comFi.regionIdRegion','regFi')
     .select()
+    .where("user.habilitado = :h",{h:"S"})
     .getMany();
 
     const query3 = await getRepository(Region)
@@ -313,6 +316,7 @@ export const updateUsuario = async (req: Request, res: Response): Promise<Respon
             "END as Tipo"
         ])
         .where("\"us\".id_Usuario = :id", { id: usuario.idUsuario})
+        .andWhere("\"us\".habilitado = :h and (\"per\".habilitado = :hp or \"fi\".habilitado= :hf)",{h:'S',hp:'S ',hf:'S'})
         .getRawOne();
 
         return res.json([usuario,query]);
@@ -337,9 +341,11 @@ export const getcentros = async (req: Request, res: Response): Promise<Response>
     .leftJoinAndSelect('c.direccionIdDireccion','d')
     .leftJoinAndSelect('d.comunaComuna','com')
     .leftJoinAndSelect('com.regionIdRegion','reg')
-    ;
+    .leftJoinAndSelect('c.boxes','box')
+    .select()
+    .getMany();
 
-    result.push({});
+    result.push({centro:query});
 
     console.log(result);
     return res.json(result);
