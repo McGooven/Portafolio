@@ -7,13 +7,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="800.0" styleClass="background3" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdrRol.SedBoxManteController">
+<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="800.0" styleClass="background" stylesheets="@../../CSS/AdministradorRol.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdrRol.SedBoxManteController">
    <children>
       <GridPane prefHeight="560.0" prefWidth="800.0">
         <columnConstraints>
@@ -24,7 +25,7 @@
           <RowConstraints maxHeight="436.0" minHeight="10.0" prefHeight="407.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <GridPane styleClass="background2">
+            <GridPane styleClass="background">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -34,11 +35,14 @@
                 <RowConstraints maxHeight="57.33333206176758" minHeight="10.0" prefHeight="34.66666793823242" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label id="titleBand" prefHeight="23.0" prefWidth="800.0" text="                                                                                                                                                                                                                        Administrador" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                  <Pane id="titleBackground" prefHeight="93.0" prefWidth="775.0" styleClass="background" GridPane.columnSpan="2" />
+                  <Label id="titleBand" prefHeight="37.0" prefWidth="800.0" text="                                                                                                                                                                                                                        Administrador" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                  <Pane id="titleBackground" prefHeight="107.0" prefWidth="800.0" GridPane.columnSpan="2">
+                     <children>
+                        <ImageView id="imgLogo" fitHeight="93.0" fitWidth="137.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" />
+                     </children></Pane>
                </children>
             </GridPane>
-            <GridPane hgap="50.0" prefHeight="521.0" prefWidth="795.0" styleClass="background3" GridPane.rowIndex="1">
+            <GridPane hgap="50.0" prefHeight="521.0" prefWidth="795.0" styleClass="background" GridPane.rowIndex="1">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.6666564941406" minWidth="0.0" prefWidth="268.33331298828125" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="528.9999847412109" minWidth="10.0" prefWidth="481.66668701171875" />
@@ -54,7 +58,7 @@
                 <RowConstraints maxHeight="66.66665649414062" minHeight="10.0" prefHeight="36.000030517578125" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <GridPane prefHeight="406.0" prefWidth="245.0" styleClass="background3" GridPane.rowIndex="1" GridPane.rowSpan="7">
+                  <GridPane prefHeight="406.0" prefWidth="245.0" styleClass="background" GridPane.rowIndex="1" GridPane.rowSpan="7">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.33333587646484" minWidth="10.0" prefWidth="37.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="228.66666793823242" minWidth="10.0" prefWidth="119.0" />
@@ -96,7 +100,7 @@
                   </TableView>
                   <Pane id="sedeCardContainer" fx:id="panSedeCardContainer" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
                      <children>
-                        <GridPane hgap="10.0" layoutX="-22.0" prefHeight="192.0" prefWidth="484.0" styleClass="background3">
+                        <GridPane hgap="10.0" layoutX="-22.0" prefHeight="192.0" prefWidth="484.0" styleClass="background">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="120.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="174.0" />

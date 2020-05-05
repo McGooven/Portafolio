@@ -1,22 +1,20 @@
-
-
-.background {
-    -fx-background-color: #E56161;
+#titleBackground {
+    -fx-background-image: url("images/titleBackground.png");
+    -fx-background-repeat: stretch;
+    }
     
-}
-.background2 {
-    -fx-background-color: #F1DCDC;
+#imgLogo {
+    -fx-image: url("images/logo.jpg");
     
-}
-.background3 {
-    -fx-background-color: #F4F0F0;
-    
-}
-
+    }
 .label {
     -fx-font-size: 9pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: black;
     -fx-opacity: 0.6;
+}
+
+#titleBand{
+    -fx-background-color: linear-gradient(from 20% 20% to 90% 90%,rgba(3, 74, 216, 1),rgba(170, 198, 254, 1));
 }
 

@@ -4,6 +4,8 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 import com.jayway.jsonpath.WriteContext;
+import controladores.AdrRol.SedBoxManteController;
+import controladores.AdrRol.SedBoxManteController.RowSedes;
 import controladores.PeticionJSON;
 import controladores.StageController;
 import java.io.IOException;
@@ -51,10 +53,9 @@ public class MantenedoresController implements Initializable {
     @FXML private Pane panContMantenedores,panContInfoUsuario;
     @FXML private GridPane grdPContMantUsuario;
     
-    @FXML private TableView<RowUsuarios> tbvMantUsuario;
-    @FXML private TableColumn<RowUsuarios, String> tblCRut;
-    @FXML private TableColumn<RowUsuarios, String> tblCNombre;
-    @FXML private TableColumn<RowUsuarios, String> tblCTipo;
+    @FXML private TableView<RowSedes> tbvMantUsuario;
+    @FXML private TableColumn<RowSedes, String> tblCRut;
+
     
     @FXML private Button btnGuardar,btnCancelar,btnSalir;
     @FXML private TextField txtBuscadorUsuario;
