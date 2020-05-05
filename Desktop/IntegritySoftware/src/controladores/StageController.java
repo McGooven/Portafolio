@@ -75,4 +75,13 @@ public class StageController {
     public void stageOff(){
         this.mainStage.close();
     }
+    
+    public boolean searchForContent(String nombre){
+        boolean existe=false;
+        if(this.fxmlMap.get(nombre) != null){
+            existe = true;
+        }
+        
+        return existe;
+    }
 }

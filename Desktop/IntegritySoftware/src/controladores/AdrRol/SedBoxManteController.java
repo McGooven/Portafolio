@@ -14,13 +14,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import controladores.PeticionJSON;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseEvent;
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * FXML Controller class, está directamente relacionado con el fxml en el paquete "vistas".
  *
@@ -29,10 +31,12 @@ import org.json.JSONArray;
 public class SedBoxManteController implements Initializable {
     StageController stageController;
     
-    @FXML private ListView<?> ltvSedes;
+    @FXML private ListView<String> ltvSedes;
     @FXML private Button btnConfirmar,btnLimpiar,btnCrearSede,btnEditarSede;
-    @FXML private TableView<?> tbvBoxesSede;
-    @FXML private TableColumn<?, ?> colId, colEstado, colHabilitada;
+    @FXML private TableView<Box> tbvBoxesSede;
+    @FXML private TableColumn<Box, Integer> colId; 
+    @FXML private TableColumn<Box, String> colEstado; 
+    @FXML private TableColumn<Box, String> colHabilitada;
     @FXML private Pane panSedeCardContainer;
     @FXML private TextField txtFRegSede,txtFCiuSede,txtFCalleSede,txtFAnomSede;
 
@@ -44,19 +48,22 @@ public class SedBoxManteController implements Initializable {
         
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    PeticionJSON request = new PeticionJSON(new JSONObject(), "GET", "http://localhost:3000/api/usuarios");
-    request.connect();
-     ObservableList<SedBoxManteController.RowSedes> list =(request.res);
-    
-    ltvSedes.setOnMouseClicked((MouseEvent event)-> {
+        PeticionJSON request = new PeticionJSON(new JSONObject(), "get", "http://localhost:3000/api/centros"); 
+        request.connect();
+        
+        JSONArray boxes = request.res.getJSONObject(0).getJSONArray("centro");
+        
+        ObservableList<Box> list = FXCollections.observableArrayList(
+                
+        );
         
         //ventana add box
         
-    });
+
     }
     
     private ObservableList<RowSedes> rellenarSedes(JSONArray res) {
-        ObservableList<RowSedes> result = FXCollection.observableArrayList();
+        ObservableList<RowSedes> result = FXCollections.observableArrayList();
         JSONObject firstObject = res.getJSONObject(0);
         JSONArray Usuarios = firstObject.getJSONArray("rows");
         
@@ -88,6 +95,44 @@ public class SedBoxManteController implements Initializable {
      */
     public void setStageController(StageController c){
         this.stageController = c;
+        
+    }
+    
+    public static class Box{
+        private SimpleIntegerProperty idBox;
+        private SimpleStringProperty habilitada;
+        private SimpleStringProperty estado;
+        
+        public Box(Integer idBox, String habilitada, String estado) {
+            this.idBox = new SimpleIntegerProperty(idBox);
+            this.habilitada = new SimpleStringProperty(habilitada);
+            this.estado = new SimpleStringProperty(estado);
+        }
+
+        public int getIdBox() {
+            return idBox.get();
+        }
+
+        public void setIdBox(int idBox) {
+            this.idBox.set(idBox);
+        }
+
+        public String getHabilitada() {
+            return habilitada.get();
+        }
+
+        public void setHabilitada(String habilitada) {
+            this.habilitada.set(habilitada);
+        }
+
+        public String getEstado() {
+            return estado.get();
+        }
+
+        public void setEstado(String estado) {
+            this.estado.set(estado);
+        }
+        
     }
     
 }
