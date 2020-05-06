@@ -67,13 +67,18 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
     .createQueryBuilder('cargos')
     .getMany();
 
+    const query6 = await getRepository(Centro)
+    .createQueryBuilder('centro')
+    .getMany();
+
 
     result.push({
         "rows":query,
         "UsuariosObj":query2,
         "regiones":query3,
         "comunas":query4,
-        "cargos":query5
+        "cargos":query5,
+        "centro":query6
     });
 
     console.log(result);
