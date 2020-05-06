@@ -9,6 +9,7 @@ import controladores.StageController;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -27,7 +28,7 @@ import org.json.JSONObject;
 public class PacienteFormController implements Initializable {
     StageController stageController;
     
-    @FXML private TextField txtCorreo, txtIdFicha, txtEtapa, txtPrimerNombre, txtSegundoNombre, txtPrimerApellido, txtSegundoApellido, txtRut, txtCalle;
+    @FXML private TextField txtCorreo, txtidFicha, txtEtapa, txtPrimerNombre, txtSegundoNombre, txtPrimerApellido, txtSegundoApellido, txtRut, txtCalle;
     @FXML private DatePicker dmpFechaNacimiento;
     @FXML private Button btnCargar;
     @FXML private ImageView imgFoto;
@@ -112,44 +113,57 @@ public class PacienteFormController implements Initializable {
 
     }    
     
+      public void limpiarFormulario(){
+        this.txtidFicha.clear();
+        this.txtPrimerNombre.clear();
+        this.txtSegundoNombre.clear();
+        this.txtPrimerApellido.clear();
+        this.txtSegundoApellido.clear();
+        this.txtRut.clear();
+        this.txtCorreo.clear();
+        this.txtCalle.clear();
+        this.dmpFechaNacimiento.setValue(null);
+        this.cmbRegion.getSelectionModel().clearSelection();
+        this.cmbComuna.getSelectionModel().clearSelection();
+        this.cmbCentro.getSelectionModel().clearSelection();
+    }
     public void setStageController(StageController c){
         this.stageController = c;
     }
 
-    public void setTxtCorreo(TextField txtCorreo) {
-        this.txtCorreo = txtCorreo;
+    public void setTxtCorreo(String txtCorreo) {
+        this.txtCorreo.setText(txtCorreo);
     }
 
-    public void setTxtIdFicha(TextField txtIdFicha) {
-        this.txtIdFicha = txtIdFicha;
+    public void setTxtIdFicha(String txtidFicha) {
+        this.txtidFicha.setText(txtidFicha);
     }
 
-    public void setTxtEtapa(TextField txtEtapa) {
-        this.txtEtapa = txtEtapa;
+    public void setTxtEtapa(String txtEtapa) {
+        this.txtEtapa.setText(txtEtapa);
     }
 
-    public void setTxtPrimerNombre(TextField txtPrimerNombre) {
-        this.txtPrimerNombre = txtPrimerNombre;
+    public void setTxtPrimerNombre(String txtPrimerNombre) {
+        this.txtPrimerNombre.setText(txtPrimerNombre);
     }
 
-    public void setTxtSegundoNombre(TextField txtSegundoNombre) {
-        this.txtSegundoNombre = txtSegundoNombre;
+    public void setTxtSegundoNombre(String txtSegundoNombre) {
+        this.txtSegundoNombre.setText(txtSegundoNombre);
     }
 
-    public void setTxtPrimerApellido(TextField txtPrimerApellido) {
-        this.txtPrimerApellido = txtPrimerApellido;
+    public void setTxtPrimerApellido(String txtPrimerApellido) {
+        this.txtPrimerApellido.setText(txtPrimerApellido);
     }
 
-    public void setTxtSegundoApellido(TextField txtSegundoApellido) {
-        this.txtSegundoApellido = txtSegundoApellido;
+    public void setTxtSegundoApellido(String txtSegundoApellido) {
+        this.txtSegundoApellido.setText(txtSegundoApellido);
     }
 
-    public void setTxtRut(TextField txtRut) {
-        this.txtRut = txtRut;
+    public void setTxtRut(String txtRut) {
+        this.txtRut.setText(txtRut);
     }
-
-    public void setTxtCalle(TextField txtCalle) {
-        this.txtCalle = txtCalle;
+    public void setTxtCalle(String txtCalle) {
+        this.txtCalle.setText(txtCalle);
     }
 
     public void setDmpFechaNacimiento(LocalDate fecha) {
@@ -164,56 +178,80 @@ public class PacienteFormController implements Initializable {
         this.imgFoto = imgFoto;
     }
 
-    public void setCmbBRegion(ComboBox<JSONObject> cmbRegion) {
+    public void setCmbRegion(ComboBox<JSONObject> cmbRegion) {
         this.cmbRegion = cmbRegion;
     }
+    
+      public void setCmbRegion(ObservableList<JSONObject> list) {
+        this.cmbRegion.setItems(list);  
+    }
+      
+    public void setRegionValue(JSONObject obj){
+        this.cmbRegion.setValue(obj);
+    }
 
-    public void setCmbBComuna(ComboBox<JSONObject> cmbComuna) {
+    public void setCmbComuna(ComboBox<JSONObject> cmbComuna) {
         this.cmbComuna = cmbComuna;
     }
     
-    public void setCmbBCentro(ComboBox<JSONObject> cmbCentro) {
+    public void setCmbComuna(ObservableList<JSONObject> list) {
+        this.cmbComuna.setItems(list); 
+    }
+    
+    public void setComunaValue(JSONObject obj){
+        this.cmbComuna.setValue(obj);
+    }
+    
+    public void setCmbCentro(ComboBox<JSONObject> cmbCentro) {
         this.cmbCentro = cmbCentro;
     }
+    public void setCmbCentro(ObservableList<JSONObject> list) {
+        this.cmbCentro.setItems(list); 
+    }
+    
+    public void setCentroValue(JSONObject obj){
+        this.cmbCentro.setValue(obj);
+    }    
 
+    
     public StageController getStageController() {
         return stageController;
     }
 
-    public TextField getTxtCorreo() {
-        return txtCorreo;
+    public String getTxtCorreo() {
+        return txtCorreo.getText();
     }
 
-    public TextField getTxtIdFicha() {
-        return txtIdFicha;
+    public String getTxtIdFicha() {
+        return txtidFicha.getText();
     }
 
-    public TextField getTxtEtapa() {
-        return txtEtapa;
+    public String getTxtEtapa() {
+        return txtEtapa.getText();
     }
 
-    public TextField getTxtPrimerNombre() {
-        return txtPrimerNombre;
+    public String getTxtPrimerNombre() {
+        return txtPrimerNombre.getText();
     }
 
-    public TextField getTxtSegundoNombre() {
-        return txtSegundoNombre;
+    public String getTxtSegundoNombre() {
+        return txtSegundoNombre.getText();
     }
 
-    public TextField getTxtPrimerApellido() {
-        return txtPrimerApellido;
+    public String getTxtPrimerApellido() {
+        return txtPrimerApellido.getText();
     }
 
-    public TextField getTxtSegundoApellido() {
-        return txtSegundoApellido;
+    public String getTxtSegundoApellido() {
+        return txtSegundoApellido.getText();
     }
 
-    public TextField getTxtRut() {
-        return txtRut;
+    public String getTxtRut() {
+        return txtRut.getText();
     }
 
-    public TextField getTxtCalle() {
-        return txtCalle;
+    public String getTxtCalle() {
+        return txtCalle.getText();
     }
 
     public String getDmpFechaNacimiento() {
@@ -228,15 +266,15 @@ public class PacienteFormController implements Initializable {
         return imgFoto;
     }
 
-    public String getCmbBRegion() {
+    public String getCmbRegion() {
         return cmbRegion.getValue().getString("nombre");    }
 
-    public String getCmbBComuna() {
+    public String getCmbComuna() {
         return cmbComuna.getValue().get("nombreComuna").toString();
     }
 
-    public String getCmbBCentro() {
-        return cmbCentro.getValue().get("nombreCentro").toString();
+    public String getCmbCentro() {
+        return cmbCentro.getValue().get("nombreSede").toString();
     }
 
 
