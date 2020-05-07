@@ -11,7 +11,7 @@ router.get('/atenciones',getAtenciones)
 router.post('/usuario/log/',findAccount);
 router.get('/usuario/:idUsuario',getUsuario);
 router.post('/usuario/U',updateUsuario);
-router.delete('/usuario/:idUsuario',deleteUsuario);
+router.post('/usuario/D',deleteUsuario);
 
 //HR routes
 router.get('/employees',getEmployees);
