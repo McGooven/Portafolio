@@ -9,9 +9,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="232.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controladores.AdvRol.PacienteFormController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="232.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.AdvRol.PacienteFormController">
    <content>
-      <AnchorPane id="AnchorPane" prefHeight="625.0" prefWidth="192.0" styleClass="mainFxmlClass">
+      <AnchorPane id="AnchorPane" fx:id="AnchorParent" prefHeight="625.0" prefWidth="192.0" styleClass="mainFxmlClass">
          <children>
             <Label layoutX="14.0" layoutY="5.0" text="Correo:" />
             <TextField fx:id="txtCorreo" layoutX="14.0" layoutY="25.0" prefHeight="26.0" prefWidth="195.0" />
@@ -39,7 +39,7 @@
             <TextField fx:id="txtCalle" layoutX="14.0" layoutY="575.0" prefHeight="26.0" prefWidth="192.0" />
             <ComboBox fx:id="cmbRegion" layoutX="14.0" layoutY="475.0" prefHeight="28.0" prefWidth="193.0" />
             <ComboBox fx:id="cmbComuna" layoutX="14.0" layoutY="525.0" prefHeight="28.0" prefWidth="192.0" />
-            <DatePicker fx:id="dtpFechaNacimiento" layoutX="14.0" layoutY="375.0" prefHeight="26.0" prefWidth="193.0" />
+            <DatePicker fx:id="dmpFechaNacimiento" layoutX="14.0" layoutY="375.0" prefHeight="26.0" prefWidth="193.0" />
             <ImageView fx:id="imgFoto" fitHeight="28.0" fitWidth="145.0" layoutX="14.0" layoutY="424.0" pickOnBounds="true" preserveRatio="true" />
             <Button fx:id="btnCargar" layoutX="152.0" layoutY="421.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="56.0" text="Cargar" />
          </children>

@@ -83,7 +83,7 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
         "regiones":query3,
         "comunas":query4,
         "cargos":query5,
-        "centros":query6
+        "centro":query6
     });
 
     console.log(result);
