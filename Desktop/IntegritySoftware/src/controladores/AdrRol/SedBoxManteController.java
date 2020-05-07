@@ -1,5 +1,6 @@
 package controladores.AdrRol;
 
+import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 import com.jayway.jsonpath.WriteContext;
 import controladores.AdvRol.MantenedoresController;
@@ -14,10 +15,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import controladores.PeticionJSON;
+import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseEvent;
 import org.json.JSONArray;
@@ -30,15 +36,20 @@ import org.json.JSONObject;
  */
 public class SedBoxManteController implements Initializable {
     StageController stageController;
+    ObservableList<RowSedes> list;
     
-    @FXML private ListView<String> ltvSedes;
+    @FXML private ListView<JSONObject> ltvSedes;
     @FXML private Button btnConfirmar,btnLimpiar,btnCrearSede,btnEditarSede;
     @FXML private TableView<Box> tbvBoxesSede;
+    //@FXML private TableColumn<RowSedes, String> colId;
+    //@FXML private TableColumn<RowSedes, String> colEstado;
+    //@FXML private TableColumn<RowSedes, String> colHabilitada;
     @FXML private TableColumn<Box, Integer> colId; 
     @FXML private TableColumn<Box, String> colEstado; 
     @FXML private TableColumn<Box, String> colHabilitada;
     @FXML private Pane panSedeCardContainer;
-    @FXML private TextField txtFRegSede,txtFCiuSede,txtFCalleSede,txtFAnomSede;
+    @FXML private TextField txtFCalleSede,txtFAnomSede;
+    @FXML private ComboBox cmbRegion, cmbComuna;
 
     
     ReadContext rtx;
@@ -51,41 +62,71 @@ public class SedBoxManteController implements Initializable {
         PeticionJSON request = new PeticionJSON(new JSONObject(), "get", "http://localhost:3000/api/centros"); 
         request.connect();
         
-        JSONArray boxes = request.res.getJSONObject(0).getJSONArray("centro");
-        
-        ObservableList<Box> list = FXCollections.observableArrayList(
-                
-        );
-        
-        //ventana add box
+        JSONArray rows = request.res.getJSONObject(0).getJSONArray("listView");
         
 
+        
+        ltvSedes.setItems(rellenarListview(rows));
+        rtx = JsonPath.parse(request.res.getJSONObject(0).toString());
+        wtx = JsonPath.parse(request.res.getJSONObject(0).toString());
+        
+
+        
+        ltvSedes.setCellFactory(param -> new ListCell<JSONObject>() {
+            @Override
+            protected void updateItem(JSONObject item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getString("nombreSede")== null) {
+                    setText(null);
+                } else {
+                    setText(item.getString("nombreSede"));
+                }
+            }
+        }
+        );
+        
+        ltvSedes.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<JSONObject>() {
+            @Override
+            public void changed(ObservableValue<? extends JSONObject> observable, JSONObject oldValue, JSONObject newValue) {
+                System.out.println("ListView selection changed from oldValue = " 
+                        + oldValue + " to newValue = " + newValue.getInt("idCentro"));
+            }
+        });
+        
+        
+        
+        
+       
     }
     
-    private ObservableList<RowSedes> rellenarSedes(JSONArray res) {
-        ObservableList<RowSedes> result = FXCollections.observableArrayList();
-        JSONObject firstObject = res.getJSONObject(0);
-        JSONArray Usuarios = firstObject.getJSONArray("rows");
+    
+    private ObservableList<JSONObject> rellenarListview(JSONArray res) {
+        ObservableList<JSONObject> result = FXCollections.observableArrayList();
+        res.forEach((e)->  {
+            result.add((JSONObject)e);
         
-        Usuarios.forEach((e) -> {
-            JSONObject user=(JSONObject)e;
-            result.add(new RowSedes((String)user.get("SEDES")));
         });
         return result;
+        
     }
+    
+    private void infoSede(int i){
+        
+         
+    }
+   
     
     public static class RowSedes{
         private final SimpleStringProperty sedes;
-
-
+        
+        
         public RowSedes(String sedes) {
             this.sedes = new SimpleStringProperty(sedes);
-
         }
 
         public String getSedes() {
             return sedes.get();
-
      }  
         } 
     
@@ -133,6 +174,14 @@ public class SedBoxManteController implements Initializable {
             this.estado.set(estado);
         }
         
-    }
+    }   
+    
+        //limpiar
+        public void limpiarFormulario(){
+        this.txtFCalleSede.clear();
+        this.txtFAnomSede.clear();
+        this.cmbRegion.getSelectionModel().clearSelection();
+        this.cmbComuna.getSelectionModel().clearSelection();
+        }
     
 }

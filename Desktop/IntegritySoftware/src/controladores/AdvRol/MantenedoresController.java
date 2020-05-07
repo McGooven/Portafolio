@@ -60,14 +60,14 @@ public class MantenedoresController implements Initializable {
     @FXML private Pane panContMantenedores,panContInfoUsuario;
     @FXML private GridPane grdPContMantUsuario;
     
-    @FXML private TableView<RowSedes> tbvMantUsuario;
-    @FXML private TableColumn<RowSedes, String> tblCRut;
-
+    @FXML private TableView<RowUsuarios> tbvMantUsuario;
+    @FXML private TableColumn<RowUsuarios, String> tblCRut;
+    @FXML private TableColumn<RowUsuarios, String> tblCNombre;
+    @FXML private TableColumn<RowUsuarios, String> tblCTipo;
     
     @FXML private Button btnGuardar,btnCancelar,btnSalir,btnAgregar,btnModificar;
     @FXML private TextField txtBuscadorUsuario;
     @FXML private Label lblUsuario,lblStockInsumo,lblReporteInsumos;
-    
     @FXML
     void habilitarCambios(ActionEvent event) {
         estadoModificando();
