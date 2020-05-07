@@ -345,6 +345,7 @@ public class MantenedoresController implements Initializable {
                 index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
                 RowUsuarios row = tbvMantUsuario.getItems().get(index);
                 String t=row.tipo.getValue();
+                
                 if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
                     tipoFormulario=1;
                 }else{
