@@ -11,6 +11,8 @@ import { Personal } from "../entities/Personal"
 import { Profesion } from "../entities/Profesion"
 import { Direccion } from "../entities/Direccion"
 import { FichaPaciente } from "../entities/FichaPaciente"
+import { Atencion } from '../entities/Atencion';
+import { Dir } from 'fs';
 
 //Manejo de Mantenedor de usuarios
 
@@ -68,15 +70,20 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
 
     const query5 = await getRepository(EspInter)
     .createQueryBuilder('cargos')
+    .where("cargos.idEspecialidad not in (:id)",{id:4})
     .getMany();
 
+    const query6 = await getRepository(Centro)
+    .createQueryBuilder('centro')
+    .getMany();
 
     result.push({
         "rows":query,
         "UsuariosObj":query2,
         "regiones":query3,
         "comunas":query4,
-        "cargos":query5
+        "cargos":query5,
+        "centros":query6
     });
 
     console.log(result);
@@ -100,8 +107,58 @@ export const findAccount = async (req: Request, res: Response): Promise<Response
 }
 
 export const crearUsuario = async (req: Request, res: Response): Promise<Response> => {
-    console.log(req.body);
-    return res.json({"msg":"hola"});
+    if(req.body.fichaPacienteIdFicha){
+        let centro;
+        if(req.body.fichaPacienteIdFicha.centroIdCentro.idCentro){
+            centro = req.body.fichaPacienteIdFicha.centroIdCentro as Centro;
+        }
+        
+    }
+    else{
+        let region;
+        let comuna;
+        let cargo;
+        let centro;
+        if(req.body.personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion.idRegion){
+            region = req.body.personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion as Region;
+        }
+        if(req.body.personalIdPersonal.direccionIdDireccion.comunaComuna.idComuna) {
+            comuna = req.body.personalIdPersonal.direccionIdDireccion.comunaComuna as Comuna;
+        }
+        if(req.body.personalIdPersonal.espInters[0].idEspecialidad){
+            cargo = req.body.personalIdPersonal.espInters[0] as EspInter;
+        }
+        if(req.body.personalIdPersonal.centroIdCentro.idCentro){
+            centro = req.body.personalIdPersonal.centroIdCentro as Centro;
+        }
+
+        try{
+            let newProfesion = getRepository(Profesion).create(req.body.personalIdPersonal.profesions[0] as Profesion);
+            const profesion = await getRepository(Profesion).save(newProfesion);
+    
+            let newDireccion = getRepository(Direccion).create(req.body.personalIdPersonal.direccionIdDireccion as Direccion);
+            const direccion = await getRepository(Direccion).save(newDireccion);
+    
+            let newPersonal  = getRepository(Personal).create(req.body.personalIdPersonal as Personal);
+            newPersonal.direccionIdDireccion = direccion;
+            newPersonal.profesions[0] = profesion;
+            newPersonal.espInters[0] = cargo;
+            console.log(direccion.idDireccion);
+            console.log(newPersonal);
+            const personal =await getRepository(Personal).save(newPersonal);
+    
+            let newUser      = getRepository(Usuario).create(req.body as Usuario);
+            newUser.personalIdPersonal = personal;
+            const usuario = await getRepository(Usuario).save(newUser);
+
+    
+            //console.log(JSON.stringify(usuario,null,2));
+        }catch(error){
+            console.log(error.message);
+        }
+    }
+
+    return res.json([{"newUser":"nada"}]);
 }
 
 export const updateUsuario = async (req: Request, res: Response): Promise<Response> => {
@@ -331,6 +388,20 @@ export const deleteUsuario = async (req: Request, res: Response): Promise<Respon
     return res.json(usuario);
 }
 
+//Atenciones
+export const getAtenciones = async (req: Request, res: Response): Promise<Response> => {
+    var result=[] as any;
+    const query = await getRepository(Atencion)
+    .createQueryBuilder('ate')
+    .leftJoinAndSelect('ate.atenInsus','cant')
+    .leftJoinAndSelect('cant.insumoIdInsumo2','insu')
+    .getMany();
+
+    result.push({atenciones:query});
+
+    console.log(result);
+    return res.json(result);
+}
 
 //Manejo del Mantenedor de Centros
 

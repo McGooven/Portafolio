@@ -1,10 +1,10 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne,PrimaryGeneratedColumn } from "typeorm";
 import { Personal } from "./Personal";
 
 @Index("PROFESION_PK", ["idProfesion"], { unique: true })
 @Entity("PROFESION")
 export class Profesion {
-  @Column("number", { primary: true, name: "ID_PROFESION" })
+  @PrimaryGeneratedColumn({ name: "ID_PROFESION" })
   idProfesion: number;
 
   @Column("blob", { name: "CERTIFICADO", nullable: true })

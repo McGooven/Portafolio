@@ -1,4 +1,4 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Column, Entity, Index, OneToMany,PrimaryGeneratedColumn } from "typeorm";
 import { AtenInsu } from "./AtenInsu";
 
 @Index("INSUMO_PK", ["idInsumo"], { unique: true })
@@ -10,7 +10,7 @@ export class Insumo {
   @Column("varchar2", { name: "NOMBRE", length: 50 })
   nombre: string;
 
-  @Column("number", { primary: true, name: "ID_INSUMO" })
+  @PrimaryGeneratedColumn({ name: "ID_INSUMO" })
   idInsumo: number;
 
   @Column("varchar2", { name: "UNIDAD_MEDIDA", length: 20 })

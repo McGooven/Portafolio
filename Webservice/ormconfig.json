@@ -8,7 +8,7 @@
         "password": "test",
         "database": "orclpdb",
         "schema": "test",
-        "logging":["query"],
+        "logging":["query","error"],
         "synchronize": false,
         "entities": [
             "dist/entities/**/*.js"

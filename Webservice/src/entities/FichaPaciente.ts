@@ -6,6 +6,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Atencion } from "./Atencion";
 import { Centro } from "./Centro";
@@ -31,7 +32,7 @@ export class FichaPaciente {
   @Column("number", { name: "ETAPA" })
   etapa: number;
 
-  @Column("number", { primary: true, name: "ID_FICHA" })
+  @PrimaryGeneratedColumn({name: "ID_FICHA" })
   idFicha: number;
 
   @Column("char", { name: "HABILITADO", length: 1 })
