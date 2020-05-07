@@ -17,7 +17,7 @@ public class FichaPaciente {
     private String snombre;
     private String sapellido;
     private File imagePaciente;
-    private LocalDate nacPaciente;
+    private String nacPaciente;
     private String habilitado;
     private Centro centroIdCentro;
     private Direccion direccionIdDireccion;
@@ -49,7 +49,7 @@ public class FichaPaciente {
     public FichaPaciente() {
     }
 
-    public FichaPaciente(Integer idFicha, Integer etapa, String rutPaciente, String papellido, String pnombre, String snombre, String sapellido, File imagePaciente, LocalDate nacPaciente, String habilitado, Centro centroIdCentro, Direccion direccionIdDireccion, List<Usuario> usuarios, List<Atencion> atencions) {
+    public FichaPaciente(Integer idFicha, Integer etapa, String rutPaciente, String papellido, String pnombre, String snombre, String sapellido, File imagePaciente, String nacPaciente, String habilitado, Centro centroIdCentro, Direccion direccionIdDireccion, List<Usuario> usuarios, List<Atencion> atencions) {
         this.idFicha = idFicha;
         this.etapa = etapa;
         this.rutPaciente = rutPaciente;
@@ -130,11 +130,11 @@ public class FichaPaciente {
         this.imagePaciente = imagePaciente;
     }
 
-    public LocalDate getNacPaciente() {
+    public String getNacPaciente() {
         return nacPaciente;
     }
 
-    public void setNacPaciente(LocalDate nacPaciente) {
+    public void setNacPaciente(String nacPaciente) {
         this.nacPaciente = nacPaciente;
     }
 

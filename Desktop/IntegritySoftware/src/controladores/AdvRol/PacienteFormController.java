@@ -266,15 +266,16 @@ public class PacienteFormController implements Initializable {
         return imgFoto;
     }
 
-    public String getCmbRegion() {
-        return cmbRegion.getValue().getString("nombre");    }
-
-    public String getCmbComuna() {
-        return cmbComuna.getValue().get("nombreComuna").toString();
+    public JSONObject getCmbRegion() {
+        return cmbRegion.getValue();    
     }
 
-    public String getCmbCentro() {
-        return cmbCentro.getValue().get("nombreSede").toString();
+    public JSONObject getCmbComuna() {
+        return cmbComuna.getValue();
+    }
+
+    public JSONObject getCmbCentro() {
+        return cmbCentro.getValue();
     }
 
 

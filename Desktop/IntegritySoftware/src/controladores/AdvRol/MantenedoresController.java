@@ -17,7 +17,6 @@ import controladores.PeticionJSON;
 import controladores.StageController;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -116,6 +115,8 @@ public class MantenedoresController implements Initializable {
     
     private void createUsuarioPaciente(){
         JSONArray result = new JSONArray();
+        EspInter cargo = new EspInter();
+        cargo.setIdEspecialidad(7); //cargo de paciente(no usar el 4 que es para los auxiliares y no se muestran en el sistema)
         Region region          = new Region();
         Comuna comuna          = new Comuna();
         Direccion direccion    = new Direccion();
@@ -123,7 +124,54 @@ public class MantenedoresController implements Initializable {
         FichaPaciente paciente = new FichaPaciente();
         Usuario usuario        = new Usuario();
         
+        centro.setIdCentro(controllerFxml2.getCmbCentro().getInt("idCentro"));
+        centro.setNombreSede(controllerFxml2.getCmbCentro().getString("nombreSede"));
         
+        region.setIdRegion(controllerFxml2.getCmbRegion().getInt("idRegion"));
+        region.setNombre(controllerFxml2.getCmbRegion().getString("nombre"));
+        
+        comuna.setIdComuna(controllerFxml2.getCmbComuna().getInt("idComuna"));
+        comuna.setNombreComuna(controllerFxml2.getCmbComuna().getString("nombreComuna"));
+        comuna.setRegionIdRegion(region);
+        
+        direccion.setIdDireccion(null);
+        direccion.setDireccion(controllerFxml2.getTxtCalle());
+        direccion.setComunaComuna(comuna);
+        
+        paciente.setCentroIdCentro(centro);
+        paciente.setRutPaciente(controllerFxml2.getTxtRut());
+        paciente.setEtapa(Integer.parseInt(controllerFxml2.getTxtEtapa()));
+        paciente.setDireccionIdDireccion(direccion);
+        paciente.setHabilitado("S");
+        paciente.setImagePaciente(null);
+        paciente.setNacPaciente(controllerFxml2.getDmpFechaNacimiento());
+        paciente.setPnombre(controllerFxml2.getTxtPrimerNombre());
+        paciente.setSnombre(controllerFxml2.getTxtSegundoNombre());
+        paciente.setPapellido(controllerFxml2.getTxtPrimerApellido());
+        paciente.setSapellido(controllerFxml2.getTxtSegundoApellido());
+        
+        usuario.setPassword(controllerFxml2.getTxtCorreo().substring(0, 3)+
+                controllerFxml2.getTxtRut().substring(controllerFxml2.getTxtRut().length()-1));
+        usuario.setFichaPacienteIdFicha(paciente);
+        usuario.setHabilitado("S");
+        usuario.setPermisos(cargo);
+        usuario.setCorreo(controllerFxml2.getTxtCorreo());
+        usuario.setIdUsuario(null);
+        
+        try {
+            JSONObject object = new JSONObject(usuario);
+            result.put(object);
+            PeticionJSON request = new PeticionJSON(result.getJSONObject(0), "post", "http://localhost:3000/api/usuario/C");
+            request.connect();
+
+            JSONArray array = new JSONObject(rtx.jsonString()).getJSONArray("UsuariosObj");
+            array.put(request.res.getJSONObject(0).getJSONObject("newUser"));
+            wtx.add("$.UsuariosObj", new net.minidev.json.JSONArray().addAll(array.toList()));
+            rtx = JsonPath.parse(wtx.jsonString());
+            list.setAll(rellenarTablaUsuarios(request.res.getJSONArray(1)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }        
     }
     
     private void createUsuarioPersonal() {
@@ -192,10 +240,15 @@ public class MantenedoresController implements Initializable {
             usuario.setPersonalIdPersonal(personal);
             try {
                 JSONObject object = new JSONObject(usuario);
-                System.out.println(object);
                 result.put(object);
                 PeticionJSON request = new PeticionJSON(result.getJSONObject(0), "post", "http://localhost:3000/api/usuario/C");
                 request.connect();
+                
+                JSONArray array = new JSONObject(rtx.jsonString()).getJSONArray("UsuariosObj");
+                array.put(request.res.getJSONObject(0).getJSONObject("newUser"));
+                wtx.add("$.UsuariosObj", new net.minidev.json.JSONArray().addAll(array.toList()));
+                rtx = JsonPath.parse(wtx.jsonString());
+                list.setAll(rellenarTablaUsuarios(request.res.getJSONArray(1)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -204,167 +257,160 @@ public class MantenedoresController implements Initializable {
     }
     
     private void updateUsuarioPersonal(int i ) {
-            String rut = controllerFxml.getTxtRut();
-            if(rtx != null && wtx != null){
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.pnombre", controllerFxml.getTxtPNombre());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.snombre", controllerFxml.getTxtSNombre());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.papellido", controllerFxml.getTxtPApellido());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.sapellido", controllerFxml.getTxtSApellido());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.nacPersonal", controllerFxml.getDtpFechaNacimiento());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.anioIngreso", controllerFxml.getDtpFechaIngreso());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".correo", controllerFxml.getTxtEmail());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion.nombre", new net.minidev.json.JSONObject(controllerFxml.getCmbBRegion().toMap()));
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.direccionIdDireccion.comunaComuna.nombreComuna", new net.minidev.json.JSONObject(controllerFxml.getCmbBComuna().toMap()));
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.direccionIdDireccion.direccion", controllerFxml.getTxtDireccion());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.profesions[0].titulo", controllerFxml.getTxtTitulo());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.profesions[0].casaEstudio", controllerFxml.getTxtCasaEstudio());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.profesions[0].fechaEgreso", controllerFxml.getDtpFechaEgreso());
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.espInters[0].nombre", new net.minidev.json.JSONObject(controllerFxml.getCmbBCargo().toMap()));
-                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.centros", new net.minidev.json.JSONObject(controllerFxml.getCmbBSede().toMap()));
-                
-                JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
-                    .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);
-                JSONObject json2= new JSONArray(((List)rtx
-                    .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);
-                System.out.println(json1);
-                System.out.println(json2);
-                
-                if(json1.similar(json2)){
-                    System.out.println("son iguales");
-                }else{
-                    System.out.println("son diferentes");
-                    
-                    PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
-                    request.connect();
-                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
-                            new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
-                    rtx = JsonPath.parse(wtx.jsonString());
-                    System.out.println(rtx.jsonString());
-                    
-                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
- 
-                }        
-            }
-        
+        String rut = controllerFxml.getTxtRut();
+        if(rtx != null && wtx != null){
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.pnombre", controllerFxml.getTxtPNombre());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.snombre", controllerFxml.getTxtSNombre());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.papellido", controllerFxml.getTxtPApellido());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.sapellido", controllerFxml.getTxtSApellido());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.nacPersonal", controllerFxml.getDtpFechaNacimiento());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.anioIngreso", controllerFxml.getDtpFechaIngreso());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".correo", controllerFxml.getTxtEmail());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.direccionIdDireccion.comunaComuna.regionIdRegion", new net.minidev.json.JSONObject(controllerFxml.getCmbBRegion().toMap()));
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.direccionIdDireccion.comunaComuna", new net.minidev.json.JSONObject(controllerFxml.getCmbBComuna().toMap()));
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.direccionIdDireccion.direccion", controllerFxml.getTxtDireccion());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.profesions[0].titulo", controllerFxml.getTxtTitulo());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.profesions[0].casaEstudio", controllerFxml.getTxtCasaEstudio());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.profesions[0].fechaEgreso", controllerFxml.getDtpFechaEgreso());
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.espInters[0]", new net.minidev.json.JSONObject(controllerFxml.getCmbBCargo().toMap()));
+            wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.centroIdCentro", new net.minidev.json.JSONObject(controllerFxml.getCmbBSede().toMap()));
+
+            JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
+                .toString())
+                .getJSONObject(0);
+            JSONObject json2= new JSONArray(((List)rtx
+                .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
+                .toString())
+                .getJSONObject(0);
+
+            if(json1.similar(json2)){
+                System.out.println("son iguales");
+            }else{
+                System.out.println("son diferentes");
+
+                PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
+                request.connect();
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
+                        new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
+                rtx = JsonPath.parse(wtx.jsonString());
+
+                list.setAll(rellenarTablaUsuarios(request.res.getJSONArray(1)));
+            }        
+        }
     }
 
-        private void updateUsuarioPaciente(int i ) {
-            String rut = controllerFxml2.getTxtRut();
-            if(rtx != null && wtx != null){
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.pnombre", controllerFxml2.getTxtPrimerNombre());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.snombre", controllerFxml2.getTxtSegundoNombre());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.papellido", controllerFxml2.getTxtPrimerApellido());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.sapellido", controllerFxml2.getTxtSegundoApellido());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.nacPaciente", controllerFxml2.getDmpFechaNacimiento());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.etapa", Integer.parseInt(controllerFxml2.getTxtEtapa()));
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".correo", controllerFxml2.getTxtCorreo());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPersonal == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.direccionIdDireccion.comunaComuna.regionIdRegion.nombre", controllerFxml2.getCmbRegion());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPersonal == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.direccionIdDireccion.comunaComuna.nombreComuna", controllerFxml2.getCmbComuna());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPersonal == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.centroIdCentro.nombreSede", controllerFxml2.getCmbCentro());
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.direccionIdDireccion.direccion", controllerFxml2.getTxtCalle());  
-                
+    private void updateUsuarioPaciente(int i ) {
+        String rut = controllerFxml2.getTxtRut();
+        if(rtx != null && wtx != null){
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.pnombre", controllerFxml2.getTxtPrimerNombre());
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.snombre", controllerFxml2.getTxtSegundoNombre());
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.papellido", controllerFxml2.getTxtPrimerApellido());
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.sapellido", controllerFxml2.getTxtSegundoApellido());
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.nacPaciente", controllerFxml2.getDmpFechaNacimiento());
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.etapa", Integer.parseInt(controllerFxml2.getTxtEtapa()));
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".correo", controllerFxml2.getTxtCorreo());
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPersonal == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.direccionIdDireccion.comunaComuna.regionIdRegion", new net.minidev.json.JSONObject(controllerFxml2.getCmbRegion().toMap()));
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPersonal == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.direccionIdDireccion.comunaComuna", new net.minidev.json.JSONObject(controllerFxml2.getCmbComuna().toMap()));
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPersonal == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.centroIdCentro", new net.minidev.json.JSONObject(controllerFxml2.getCmbCentro().toMap()));
+            wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.direccionIdDireccion.direccion", controllerFxml2.getTxtCalle());  
 
-                
-                JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
-                    .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);
-                JSONObject json2= new JSONArray(((List)rtx
-                    .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);
-                System.out.println(json1);
-                System.out.println(json2);
-                
-                if(json1.similar(json2)){
-                    System.out.println("son iguales");
-                }else{
-                    System.out.println("son diferentes");
-                    
-                    PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
-                    request.connect();
-                    wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]",
-                            new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
-                    rtx = JsonPath.parse(wtx.jsonString());
-                    System.out.println(rtx.jsonString());
-                    
-                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
+            JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
+                .toString())
+                .getJSONObject(0);
+            JSONObject json2= new JSONArray(((List)rtx
+                .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
+                .toString())
+                .getJSONObject(0);
+            System.out.println(json1);
+            System.out.println(json2);
 
-                }        
-            }
-        
+            if(json1.similar(json2)){
+                System.out.println("son iguales");
+            }else{
+                System.out.println("son diferentes");
+
+                PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
+                request.connect();
+                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]",
+                        new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
+                rtx = JsonPath.parse(wtx.jsonString());
+                System.out.println(rtx.jsonString());
+
+                 list.setAll(rellenarTablaUsuarios(request.res.getJSONArray(1)));
+            }        
+        }
     }
         
-            private void deshabilitarUsuario(int i){
-            RowUsuarios row = tbvMantUsuario.getItems().get(index);    
-            String rut = row.getRut();
-            
-            if(rtx != null && wtx != null && index >= 0 ){
-                if (tipoFormulario == 1) {
-                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
-                        +".personalIdPersonal.habilitado", "N ");
-                
-                    JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
-                    .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);                      
-                    PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
-                    request.connect();
-                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
-                            new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
-                    rtx = JsonPath.parse(wtx.jsonString());
-                    System.out.println(rtx.jsonString());
-                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
-            
-                }else{
-                    wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.habilitado", "N"); 
-                
-                    JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
-                    .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);                      
-                    PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
-                    request.connect();
-                    wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]",
-                            new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
-                    rtx = JsonPath.parse(wtx.jsonString());
-                    System.out.println(rtx.jsonString());
-                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
+    private void deshabilitarUsuario(int i){
+        RowUsuarios row = tbvMantUsuario.getItems().get(index);    
+        String rut = row.getRut();
 
-                }       
-          }           
-       }
+        if(rtx != null && wtx != null && index >= 0 ){
+            if (tipoFormulario == 1) {
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    +".personalIdPersonal.habilitado", "N ");
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                    + ".habilitado", "N");
+
+                JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
+                .toString())
+                .getJSONObject(0);                      
+                PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/D");
+                request.connect();
+                wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
+                        new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
+                rtx = JsonPath.parse(wtx.jsonString());
+                list.setAll(rellenarTablaUsuarios(request.res.getJSONArray(1)));
+
+            }else{
+                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    +".fichaPacienteIdFicha.habilitado", "N");
+                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                    + ".habilitado", "N");
+
+                JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
+                .toString())
+                .getJSONObject(0);                      
+                PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/D");
+                request.connect();
+                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]",
+                        new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
+                rtx = JsonPath.parse(wtx.jsonString());
+                list.setAll(rellenarTablaUsuarios(request.res.getJSONArray(1)));
+                
+            }       
+        }           
+    }
 
         
     @Override
@@ -388,20 +434,18 @@ public class MantenedoresController implements Initializable {
                 }
             }else{
                 //para pacientes
-                if(creando == 1 && controllerFxml != null){
+                if(modificando == 1 && controllerFxml2 != null){
+                    updateUsuarioPaciente(index);
+                    tbvMantUsuario.refresh();
+                    estadoVacío();                    
+                }
+                if(creando == 1 && controllerFxml2 != null){
                     //para crear usuario paciente
                     createUsuarioPaciente();
                     tbvMantUsuario.refresh();
                     estadoVacío();
                 }
-                updateUsuarioPaciente(index);
-                tbvMantUsuario.refresh();
-                estadoVacío();
-            }
-
-            
-            
-            
+            }  
         });
         btnAgregar.setOnAction((e)->{
             estadoCreando();
@@ -532,7 +576,7 @@ public class MantenedoresController implements Initializable {
                             JSONArray regions = new JSONArray(((List)rtx.read("$.regiones[*]")).toString());
                             JSONArray comuns = new JSONArray(((List)rtx.read("$.comunas[*]")).toString());
                             JSONArray cargos = new JSONArray(((List)rtx.read("$.cargos[*]")).toString());    
-                            JSONArray centros = new JSONArray(((List)rtx.read("$.centros[*]")).toString()); 
+                            JSONArray centros = new JSONArray(((List)rtx.read("$.centro[*]")).toString()); 
                             controllerFxml.setTxtRut(rut.get(0));
                             controllerFxml.setTxtId(id.get(0).toString());
                             controllerFxml.setTxtPNombre(pNombre.get(0));
@@ -712,7 +756,7 @@ public class MantenedoresController implements Initializable {
             controllerFxml.AnchorParent.setDisable(false);
             controllerFxml.limpiarFormulario();
         }else{
-            controllerFxml2.AnchorParent.setDisable(true);
+            controllerFxml2.AnchorParent.setDisable(false);
             controllerFxml2.limpiarFormulario();
             
         }

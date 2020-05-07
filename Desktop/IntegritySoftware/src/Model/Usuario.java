@@ -79,9 +79,12 @@ public class Usuario {
         else if(permisos.getIdEspecialidad() == 5){
             this.permisos = 1;
         }
-        else{
+        else if(permisos.getIdEspecialidad() == 6){
             this.permisos = 2;
-        }        
+        }
+        else{
+            this.permisos = 5;
+        }
         
     }
 
