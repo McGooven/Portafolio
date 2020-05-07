@@ -4,10 +4,9 @@
         "type": "oracle",
         "host": "localhost",
         "port": 1521,
-        "username": "test",
-        "password": "test",
+        "username": "ISW",
+        "password": "oracle",
         "database": "orclpdb",
-        "schema": "test",
         "logging":["query"],
         "synchronize": false,
         "entities": [

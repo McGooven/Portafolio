@@ -344,8 +344,11 @@ export const getcentros = async (req: Request, res: Response): Promise<Response>
     .leftJoinAndSelect('c.boxes','box')
     .select()
     .getMany();
+    const query1 = await getRepository(Centro)
+    .createQueryBuilder()
+    .getMany();
 
-    result.push({centro:query});
+    result.push({centro:query, listView:query1});
 
     console.log(result);
     return res.json(result);
