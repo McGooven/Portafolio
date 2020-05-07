@@ -55,7 +55,7 @@ export const getUsuarios = async (req: Request, res: Response): Promise<Response
     .leftJoinAndSelect('comPer.regionIdRegion','regPer')
     .leftJoinAndSelect('comFi.regionIdRegion','regFi')
     .select()
-    .where("user.habilitado = :h",{h:"S"})
+    .where("user.habilitado = :h and (per.habilitado = :hp or fi.habilitado= :hf)",{h:"S", hp:'S ', hf:'S'})
     .getMany();
 
     const query3 = await getRepository(Region)
@@ -320,11 +320,11 @@ export const updateUsuario = async (req: Request, res: Response): Promise<Respon
             "ELSE 'Paciente' "+
             "END as Tipo"
         ])
-        .where("\"us\".id_Usuario = :id", { id: usuario.idUsuario})
-        .andWhere("\"us\".habilitado = :h and (\"per\".habilitado = :hp or \"fi\".habilitado= :hf)",{h:'S',hp:'S ',hf:'S'})
-        .getRawOne();
+       
+        .where("\"us\".habilitado = :h and (\"per\".habilitado = :hp or \"fi\".habilitado= :hf)",{h:'S',hp:'S ',hf:'S'})
+        .getRawMany();
 
-        return res.json([usuario,query]);
+        return res.json([usuario,{"rows": query}]);
     }else{
         return res.status(404).json([{msg:'usuario no encontrado'}]);
     }
