@@ -7,54 +7,52 @@ import java.util.List;
  * @author Diego
  */
 public class Comuna {
-    private Integer id;
-    private String name;
-    private Region region;
-    private List<Direccion> direcciones;
+    private Integer idComuna;
+    private String nombreComuna;
+    private Region regionIdRegion;
+        private List<Direccion> direccions;
 
-    public Comuna(Integer id, String name, Region region) {
-        this.id = id;
-        this.name = name;
-        this.region = region;
+    public Comuna() {
     }
 
-    public Comuna(Integer id, String name, Region region, List<Direccion> direcciones) {
-        this.id = id;
-        this.name = name;
-        this.region = region;
-        this.direcciones = direcciones;
+    public Comuna(Integer idComuna, String nombreComuna, Region regionIdRegion, List<Direccion> direccions) {
+        this.idComuna = idComuna;
+        this.nombreComuna = nombreComuna;
+        this.regionIdRegion = regionIdRegion;
+        this.direccions = direccions;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdComuna() {
+        return idComuna;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdComuna(Integer idComuna) {
+        this.idComuna = idComuna;
     }
 
-    public String getName() {
-        return name;
+    public String getNombreComuna() {
+        return nombreComuna;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombreComuna(String nombreComuna) {
+        this.nombreComuna = nombreComuna;
     }
 
-    public Region getRegion() {
-        return region;
+    public Region getRegionIdRegion() {
+        return regionIdRegion;
     }
 
-    public void setRegion(Region region) {
-        this.region = region;
-    }
-    
-    public List<Direccion> getDirecciones() {
-        return direcciones;
+    public void setRegionIdRegion(Region regionIdRegion) {
+        this.regionIdRegion = regionIdRegion;
     }
 
-    public void setDirecciones(List<Direccion> direcciones) {
-        this.direcciones = direcciones;
+    public List<Direccion> getDireccions() {
+        return direccions;
     }
+
+    public void setDireccions(List<Direccion> direccions) {
+        this.direccions = direccions;
+    }
+
     
 }

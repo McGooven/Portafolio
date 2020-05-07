@@ -1,3 +1,7 @@
+#buscadorIcon{
+    -fx-background-image: url("images/refreshIcon.png");
+    -fx-background-size: stretch;
+}
 #titleBand{
     -fx-background-color: linear-gradient(from 20% 20% to 90% 90%,rgba(3, 74, 216, 1),rgba(170, 198, 254, 1));
 }

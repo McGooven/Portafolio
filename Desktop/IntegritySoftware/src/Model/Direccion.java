@@ -7,39 +7,47 @@ import java.util.List;
  * @author Diego
  */
 public class Direccion {
-    private Integer id;
-    private String nombre;
-    private Comuna comuna;
+    private Integer idDireccion;
+    private String direccion;
+    private Comuna comunaComuna;
     private List<Centro> centros;
-    private List<Personal> personales;
-    private List<FichaPaciente>pacientes;
-    
-    
-    public Direccion(Integer id, String nombre, Comuna comuna) {
-        this.id = id;
-        this.nombre = nombre;
-        this.comuna = comuna;
+    private List<Personal> personals;
+    private List<FichaPaciente> fichaPacientes;
+
+    public Direccion() {
     }
 
-    public Direccion(Integer id, String nombre, Comuna comuna, List<Centro> centros) {
-        this.id = id;
-        this.nombre = nombre;
-        this.comuna = comuna;
+    public Direccion(Integer idDireccion, String direccion, Comuna comunaComuna, List<Centro> centros, List<Personal> personals, List<FichaPaciente> fichaPacientes) {
+        this.idDireccion = idDireccion;
+        this.direccion = direccion;
+        this.comunaComuna = comunaComuna;
         this.centros = centros;
+        this.personals = personals;
+        this.fichaPacientes = fichaPacientes;
     }
 
-    public Direccion(Integer id,List<FichaPaciente> pacientes, String nombre, Comuna comuna) {
-        this.id = id;
-        this.nombre = nombre;
-        this.comuna = comuna;
-        this.pacientes = pacientes;
+    public Integer getIdDireccion() {
+        return idDireccion;
     }
 
-    public Direccion( List<Personal> personales,Integer id, String nombre, Comuna comuna) {
-        this.id = id;
-        this.nombre = nombre;
-        this.comuna = comuna;
-        this.personales = personales;
+    public void setIdDireccion(Integer idDireccion) {
+        this.idDireccion = idDireccion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public Comuna getComunaComuna() {
+        return comunaComuna;
+    }
+
+    public void setComunaComuna(Comuna comunaComuna) {
+        this.comunaComuna = comunaComuna;
     }
 
     public List<Centro> getCentros() {
@@ -50,44 +58,20 @@ public class Direccion {
         this.centros = centros;
     }
 
-    public List<Personal> getPersonales() {
-        return personales;
+    public List<Personal> getPersonals() {
+        return personals;
     }
 
-    public void setPersonales(List<Personal> personales) {
-        this.personales = personales;
+    public void setPersonals(List<Personal> personals) {
+        this.personals = personals;
     }
 
-    public List<FichaPaciente> getPacientes() {
-        return pacientes;
+    public List<FichaPaciente> getFichaPacientes() {
+        return fichaPacientes;
     }
 
-    public void setPacientes(List<FichaPaciente> pacientes) {
-        this.pacientes = pacientes;
+    public void setFichaPacientes(List<FichaPaciente> fichaPacientes) {
+        this.fichaPacientes = fichaPacientes;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Comuna getComuna() {
-        return comuna;
-    }
-
-    public void setComuna(Comuna comuna) {
-        this.comuna = comuna;
-    }
-    
 }

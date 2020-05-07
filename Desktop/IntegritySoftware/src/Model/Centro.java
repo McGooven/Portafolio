@@ -16,8 +16,18 @@ public class Centro {
 
     @Override
     public String toString() {
-        return "Centro:{" + "idCentro:" + idCentro + ", nombreSede:" + nombreSede + ", boxes:" + boxes + ", direccionIdDireccion:" + direccionIdDireccion + ", fichaPacientes:" + fichaPacientes + ", personals:" + personals + '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        sb.append("   idCentro=").append(idCentro);
+        sb.append("   nombreSede=").append(nombreSede);
+        sb.append("   boxes=").append(boxes);
+        sb.append("   direccionIdDireccion=").append(direccionIdDireccion);
+        sb.append("   fichaPacientes=").append(fichaPacientes);
+        sb.append("   personals=").append(personals);
+        sb.append('}');
+        return sb.toString();
     }
+
 
     public Centro() {
     }

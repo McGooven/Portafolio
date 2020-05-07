@@ -31,6 +31,7 @@ public class PersonalFormController implements Initializable {
     @FXML private ComboBox<JSONObject> cmbBRegion;
     @FXML private ComboBox<JSONObject> cmbBComuna;
     @FXML private ComboBox<JSONObject> cmbBCargo;
+    @FXML private ComboBox<JSONObject> cmbBSede;
     @FXML private Button btnFileCertificado;
     @FXML AnchorPane AnchorParent;
     
@@ -86,7 +87,23 @@ public class PersonalFormController implements Initializable {
                     ap.getString(string).equals(string)).findFirst().orElse(null);
             }
         });
-
+        
+        cmbBSede.setVisibleRowCount(4);
+        cmbBSede.setPromptText("Seleccione Sede...");
+        cmbBSede.setEditable(true);
+        cmbBSede.setConverter(new StringConverter<JSONObject>() {
+            @Override
+            public String toString(JSONObject object) {
+                if (object == null) {return null;}
+                
+                else{return object.getString("nombreSede");}                
+            }
+            @Override
+            public JSONObject fromString(String string) {
+                return cmbBCargo.getItems().stream().filter(ap -> 
+                    ap.getString(string).equals(string)).findFirst().orElse(null);
+            }
+        });
         
         //eventos en los comboboxes
         cmbBRegion.valueProperty().addListener((obs, oldval, newval) -> {
@@ -103,7 +120,12 @@ public class PersonalFormController implements Initializable {
             if(newval != null)
                 System.out.println("cargo seleccionado: " + newval.getString("nombre")
                     + ". ID: " + ((Integer)newval.getNumber("idEspecialidad")).toString());
-        });  
+        });
+        cmbBSede.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null)
+                System.out.println("centro seleccionada: " + newval.getString("nombreSede")
+                    + ". ID: " + ((Integer)newval.getInt("idCentro")).toString());
+        });
         
         AnchorParent.setDisable(true);
     }    
@@ -212,6 +234,13 @@ public class PersonalFormController implements Initializable {
     public void setCargoValue(JSONObject obj){
         this.cmbBCargo.setValue(obj);
     }
+    
+    public void setCmbBSede(ObservableList<JSONObject> list) {
+        this.cmbBSede.setItems(list);         
+    }
+    public void setSedeValue(JSONObject obj){
+        this.cmbBSede.setValue(obj);
+    }
 
     public void setBtnFileCertificado(Button btnFileCertificado) {
         this.btnFileCertificado = btnFileCertificado;
@@ -277,16 +306,19 @@ public class PersonalFormController implements Initializable {
         return dtpFechaEgreso.getValue().toString();
     }
 
-    public String getCmbBRegion() {
-        return cmbBRegion.getValue().getString("nombre");
+    public JSONObject getCmbBRegion() {
+        return cmbBRegion.getValue();
     }
 
-    public String getCmbBComuna() {
-        return cmbBComuna.getValue().get("nombreComuna").toString();
+    public JSONObject getCmbBComuna() {
+        return cmbBComuna.getValue();
     }
 
-    public String getCmbBCargo() {
-        return cmbBCargo.getValue().getString("nombre");
+    public JSONObject getCmbBCargo() {
+        return cmbBCargo.getValue();
+    }
+    public JSONObject getCmbBSede() {
+        return cmbBSede.getValue();
     }
 
     public Button getBtnFileCertificado() {
