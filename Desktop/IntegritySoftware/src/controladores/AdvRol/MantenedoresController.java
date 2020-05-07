@@ -52,6 +52,8 @@ public class MantenedoresController implements Initializable {
     int modificando=0;
     int creando = 0;
     
+    int index;
+    
     ReadContext rtx;
     WriteContext wtx;
     
@@ -136,11 +138,8 @@ public class MantenedoresController implements Initializable {
                     rtx = JsonPath.parse(wtx.jsonString());
                     System.out.println(rtx.jsonString());
                     
-                    list.set(i, new RowUsuarios(
-                        request.res.getJSONObject(1).getString("NOMBRE"),
-                        request.res.getJSONObject(1).getString("RUT"),
-                        request.res.getJSONObject(1).getString("TIPO")   
-                    ));
+                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
+ 
                 }        
             }
         
@@ -197,47 +196,52 @@ public class MantenedoresController implements Initializable {
                     rtx = JsonPath.parse(wtx.jsonString());
                     System.out.println(rtx.jsonString());
                     
-                    list.set(i, new RowUsuarios(
-                        request.res.getJSONObject(1).getString("NOMBRE"),
-                        request.res.getJSONObject(1).getString("RUT"),
-                        request.res.getJSONObject(1).getString("TIPO")   
-                    ));
+                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
+
                 }        
             }
         
     }
         
             private void deshabilitarUsuario(int i){
-            String rut = controllerFxml2.getTxtRut();
-            if(rtx != null && wtx != null){
-                wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
-                        +".fichaPacienteIdFicha.habilitado", "N");
+            RowUsuarios row = tbvMantUsuario.getItems().get(index);    
+            String rut = row.getRut();
+            
+            if(rtx != null && wtx != null && index >= 0 ){
+                if (tipoFormulario == 1) {
+                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"
+                        +".personalIdPersonal.habilitado", "N ");
                 
-                JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
-                    .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
+                    JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                    .read("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]"))
                     .toString())
-                    .getJSONObject(0);
-                JSONObject json2= new JSONArray(((List)rtx
-                    .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
-                    .toString())
-                    .getJSONObject(0);
-                System.out.println(json1);
-                System.out.println(json2);
-                
-                 if(json1.similar(json2)){
-                    System.out.println("son iguales");
+                    .getJSONObject(0);                      
+                    PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
+                    request.connect();
+                    wtx.set("$.UsuariosObj[?(@.personalIdPersonal.rutPersonal == '"+rut+"')]",
+                            new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
+                    rtx = JsonPath.parse(wtx.jsonString());
+                    System.out.println(rtx.jsonString());
+                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
+            
                 }else{
-                    System.out.println("son diferentes");
-                       
+                    wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"
+                        +".fichaPacienteIdFicha.habilitado", "N"); 
+                
+                    JSONObject json1 = new JSONArray(((List)JsonPath.parse(wtx.jsonString())
+                    .read("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]"))
+                    .toString())
+                    .getJSONObject(0);                      
                     PeticionJSON request = new PeticionJSON(json1, "post", "http://localhost:3000/api/usuario/U");
                     request.connect();
                     wtx.set("$.UsuariosObj[?(@.fichaPacienteIdFicha.rutPaciente == '"+rut+"')]",
                             new net.minidev.json.JSONObject(request.res.getJSONObject(0).toMap()));
                     rtx = JsonPath.parse(wtx.jsonString());
                     System.out.println(rtx.jsonString());
-           
-          }       
-         }   
+                     list.setAll(rellenarTablaUsuarios(request.res.getJSONObject(1).getJSONArray("rows")));
+
+                }       
+          }           
        }
 
         
@@ -338,7 +342,7 @@ public class MantenedoresController implements Initializable {
                 btnGuardar.setDisable(true);
                 btnCancelar.setDisable(true);
                 modificando=0;
-                int index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
+                index = tbvMantUsuario.getSelectionModel().getSelectedIndex();
                 RowUsuarios row = tbvMantUsuario.getItems().get(index);
                 String t=row.tipo.getValue();
                 if(t.equals("Administrador") || t.equals("Administrativo") || t.equals("Enfermero") || t.equals("Medico")){
@@ -524,10 +528,12 @@ public class MantenedoresController implements Initializable {
         }
         modificando=0;
         creando=0;
+        index=-1;
         btnAgregar.setDisable(false);
         btnModificar.setDisable(true);
         btnGuardar.setDisable(true);
         btnCancelar.setDisable(true);
+       
         tbvMantUsuario.getSelectionModel().clearSelection();
     }
     public void estadoSeleccionando(){
