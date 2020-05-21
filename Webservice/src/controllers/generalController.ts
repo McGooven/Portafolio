@@ -1,4 +1,6 @@
 import {Request,Response} from 'express'
+import fs from "fs";
+import path from "path";
 import { getRepository, getConnection, createQueryBuilder } from "typeorm";
 
 import { Usuario } from "../entities/Usuario"
@@ -12,7 +14,7 @@ import { Profesion } from "../entities/Profesion"
 import { Direccion } from "../entities/Direccion"
 import { FichaPaciente } from "../entities/FichaPaciente"
 import { Atencion } from '../entities/Atencion';
-import { Dir } from 'fs';
+import { Carrousel } from "../entities/Carrousel";
 
 //Manejo de Mantenedor de usuarios
 
@@ -500,4 +502,13 @@ export const getcentros = async (req: Request, res: Response): Promise<Response>
 
     console.log(result);
     return res.json(result);
+}
+
+//Web Page
+export const getCarrousel = async(req: Request, res: Response): Promise<Response> =>{
+    const imagen = await getRepository(Carrousel).findOne({idImg:req.params.nombre as any});
+    if (imagen){
+        res.sendFile(path.join(__dirname,'../../Media/'+imagen.img));
+    }
+    return res;
 }
