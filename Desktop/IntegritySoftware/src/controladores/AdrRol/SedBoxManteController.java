@@ -89,8 +89,12 @@ public class SedBoxManteController implements Initializable {
         ltvSedes.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<JSONObject>() {
             @Override
             public void changed(ObservableValue<? extends JSONObject> observable, JSONObject oldValue, JSONObject newValue) {
-                System.out.println("ListView selection changed from oldValue = " 
-                        + oldValue + " to newValue = " + newValue.getInt("idCentro"));
+               
+                JSONObject centro = new JSONArray(((List)rtx.read("$.centro[?(@.idCentro=='"+String.valueOf(newValue.getInt("idCentro"))+"')]")).toString()).getJSONObject(0);
+                System.out.println(centro.getString("nombreSede"));
+                
+                
+                
             }
         });
         

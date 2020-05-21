@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Centro } from "./Centro";
 import { Comuna } from "./Comuna";
@@ -17,7 +18,7 @@ export class Direccion {
   @Column("varchar2", { name: "DIRECCION", length: 200 })
   direccion: string;
 
-  @Column("number", { primary: true, name: "ID_DIRECCION" })
+  @PrimaryGeneratedColumn({name: "ID_DIRECCION" })
   idDireccion: number;
 
   @OneToMany(() => Centro, (centro) => centro.direccionIdDireccion)

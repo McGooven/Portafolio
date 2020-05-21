@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Atencion } from "./Atencion";
 import { Centro } from "./Centro";
@@ -12,7 +13,7 @@ import { Centro } from "./Centro";
 @Index("BOX_PK", ["idBox"], { unique: true })
 @Entity("BOX")
 export class Box {
-  @Column("number", { primary: true, name: "ID_BOX" })
+  @PrimaryGeneratedColumn({name: "ID_BOX" })
   idBox: number;
 
   @Column("char", { name: "HABILITADA", length: 1 })

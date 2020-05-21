@@ -1,11 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne,PrimaryGeneratedColumn } from "typeorm";
 import { Atencion } from "./Atencion";
 import { Personal } from "./Personal";
 
 @Index("PERSO_ATEN_PK", ["idPersoAten"], { unique: true })
 @Entity("PERSO_ATEN")
 export class PersoAten {
-  @Column("number", { primary: true, name: "ID_PERSO_ATEN" })
+  @PrimaryGeneratedColumn({name: "ID_PERSO_ATEN" })
   idPersoAten: number;
 
   @ManyToOne(() => Atencion, (atencion) => atencion.persoAtens)

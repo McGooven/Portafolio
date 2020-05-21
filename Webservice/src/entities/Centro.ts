@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Box } from "./Box";
 import { Direccion } from "./Direccion";
@@ -14,7 +15,7 @@ import { Personal } from "./Personal";
 @Index("CENTRO_PK", ["idCentro"], { unique: true })
 @Entity("CENTRO")
 export class Centro {
-  @Column("number", { primary: true, name: "ID_CENTRO" })
+  @PrimaryGeneratedColumn({name: "ID_CENTRO" })
   idCentro: number;
 
   @Column("varchar2", { name: "NOMBRE_SEDE", length: 100 })

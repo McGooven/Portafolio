@@ -6,6 +6,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { EspInter } from "./EspInter";
 import { PersoAten } from "./PersoAten";
@@ -27,7 +28,7 @@ export class Personal {
   @Column("blob", { name: "IMAGE_PERSONAL", nullable: true })
   imagePersonal: Buffer | null;
 
-  @Column("number", { primary: true, name: "ID_PERSONAL" })
+  @PrimaryGeneratedColumn({ name: "ID_PERSONAL" })
   idPersonal: number;
 
   @Column("varchar2", { name: "SAPELLIDO", nullable: true, length: 50 })

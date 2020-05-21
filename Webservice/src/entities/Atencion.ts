@@ -7,6 +7,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Box } from "./Box";
 import { TipoSesion } from "./TipoSesion";
@@ -23,7 +24,7 @@ export class Atencion {
   @Column("date", { name: "FECHA_TERMINO", nullable: true })
   fechaTermino: Date | null;
 
-  @Column("number", { primary: true, name: "ID_ATENCION" })
+  @PrimaryGeneratedColumn({name: "ID_ATENCION" })
   idAtencion: number;
 
   @Column("number", { name: "SITUACION" })

@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne,PrimaryGeneratedColumn } from "typeorm";
 import { FichaPaciente } from "./FichaPaciente";
 import { Personal } from "./Personal";
 
@@ -8,7 +8,7 @@ export class Usuario {
   @Column("char", { name: "HABILITADO", length: 1 })
   habilitado: string;
 
-  @Column("number", { primary: true, name: "ID_USUARIO" })
+  @PrimaryGeneratedColumn({name: "ID_USUARIO" })
   idUsuario: number;
 
   @Column("number", { name: "PERMISOS" })
@@ -20,13 +20,13 @@ export class Usuario {
   @Column("varchar2", { name: "CORREO", length: 50 })
   correo: string;
 
-  @ManyToOne(() => FichaPaciente, (fichaPaciente) => fichaPaciente.usuarios)
+  @ManyToOne(() => FichaPaciente, (fichaPaciente) => fichaPaciente.usuarios,{nullable:true})
   @JoinColumn([
     { name: "FICHA_PACIENTE_ID_FICHA", referencedColumnName: "idFicha" },
   ])
   fichaPacienteIdFicha: FichaPaciente;
 
-  @ManyToOne(() => Personal, (personal) => personal.usuarios)
+  @ManyToOne(() => Personal, (personal) => personal.usuarios,{nullable:true})
   @JoinColumn([
     { name: "PERSONAL_ID_PERSONAL", referencedColumnName: "idPersonal" },
   ])

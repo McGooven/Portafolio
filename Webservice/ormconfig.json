@@ -7,12 +7,14 @@
         "username": "ISW",
         "password": "oracle",
         "database": "orclpdb",
-        "logging":["query"],
+        "schema": "test",
+        "logging":["query","error"],
         "synchronize": false,
         "entities": [
             "dist/entities/**/*.js"
         ],
-        "connectString":"(DESCRIPTION =    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))    (CONNECT_DATA =      (SERVER = DEDICATED)      (SERVICE_NAME = orclpdb)    )  )"
+        "connectString":  "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = orclpdb)))"
+    
     },
     {
         "name": "hrSchema",
