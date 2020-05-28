@@ -2,12 +2,13 @@
 <html lang="en">
 
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{% static 'CSS/index.css' %}">
 
@@ -15,7 +16,9 @@
 </head>
 
 <body>
+
     <div class="container-fluid">
+
         <div id="carrusel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -24,21 +27,24 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="{% static 'Apparition of My Cousin Carolinetta on the Beach at Rosas(1934).jpg' %}" alt="First slide">
+                    <img class="d-block w-100"
+                        src="{% static 'img/Apparition of My Cousin Carolinetta on the Beach at Rosas(1934).jpg' %}"
+                        alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>paisajes1</h5>
                         <p>parrafo1</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="{% static 'ER2V8dSUUAAuCLm.jpeg' %}" alt="Second slide">
+                    <img class="d-block w-100" src="{% static 'img/ER2V8dSUUAAuCLm.jpeg' %}" alt="Second slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>paisajes2</h5>
                         <p>parrafo2</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="{% static 'The Ram (The Spectral Cow) (1928).jpg' %}" alt="Third slide">
+                    <img class="d-block w-100" src="{% static 'img/The Ram (The Spectral Cow) (1928).jpg' %}"
+                        alt="Third slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>paisajes3</h5>
                         <p>parrafo3</p>
@@ -56,10 +62,193 @@
         </div>
 
     </div>
+
+    <main>
+        <section class="contenedor sobre nosotros">
+            <h2 class="titulo">Nuestra Misión</h2>
+            <div id="quienes" class="contenedor-sobre-nosotros">
+                <img src="{% static 'img/foto1.jpg' %}" alt="" class="imagen-about-us">
+                <div class="contenido-textos">
+                    <h2>Quienes Somos</h2>
+                    <p> </p>
+                    <p>Somos Corporación sin fines de lucro que atiende niños, niñas y jóvenes con síndrome de Down en
+                        forma gratuita, creada en el año 2000, cuyo objetivo es “Promover el desarrollo integral de las
+                        personas con síndrome de Down con el fin de mejorar su calidad de vida y la de sus familias,
+                        desde los primeros años hasta la adultez”.</p>
+
+                </div>
+            </div>
+        </section>
+        <section class="clientes contenedor">
+            <h2 class="titulo">Nuestros servicios</h2>
+            <div id="servicios" class="cards">
+                <div class="card">
+                    <img src="{% static 'img/kine.png' %}" alt="">
+                    <div class="contenido-texto-card">
+                        <p>Kinesiología:</p>
+                        <p>- Estimular transiciones, Fomentar cargas y Estimular rotaciones.</p>
+                        <p>- Favorecer transición y mejorar disociación.</p>
+
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="{% static 'img/educacion.png' %}" alt="">
+                    <div class="contenido-texto-card">
+                        <p>Educación:</p>
+                        <p>- Desarrollo de la lectura comprensiva.</p>
+                        <p>- Reconocimiento global de las palabras.</p>
+                    </div>
+                </div>
+
+        </section>
+        <section class="clientes contenedor">
+            <div class="cards">
+                <div class="card">
+                    <img src="{% static 'img/fono.png' %}" alt="">
+                    <div class="contenido-texto-card">
+                        <p>Fonoaudiología:</p>
+                        <p>- Desarrollo de la lectura comprensiva.</p>
+                        <p>- Producción de palabras y estructuración de oraciones.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="{% static 'img/indepen.png' %}" alt="">
+                    <div class="contenido-texto-card">
+                        <p>Independencia:</p>
+                        <p>Desarrollo de habilidades en el contexto de celebración de un cumpleaños.</p>
+                    </div>
+                </div>
+
+        </section>
+        </section>
+        <section class="clientes contenedor">
+            <div class="cards">
+                <div class="card">
+                    <img src="{% static 'img/social.png' %}" alt="">
+                    <div class="contenido-texto-card">
+                        <p>Habilidades Sociales:</p>
+                        <p>- Adquisición de habilidades que permitan autonomía</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="{% static 'img/psico.png' %}" alt="">
+                    <div class="contenido-texto-card">
+                        <p>Psicomotricidad:</p>
+                        <p>Coordinación dinámica, prehensiones y sociabilización.</p>
+                        <p>Desarrollo del vínculo con el adulto y mejorar estabilidad de la marcha. </p>
+                    </div>
+                </div>
+                <br>
+        </section>
+
+        </section>
+        <div class="container-fluid">
+            <section>
+                <div class="row">
+                    <div class="mapa col-xs-12 col-sm-6">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.8034112502505!2d-70.59133208426549!3d-33.42836930376662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf39c6654479%3A0x3af3ed155c8b1b93!2sEdudown!5e0!3m2!1ses-419!2scl!4v1589873047496!5m2!1ses-419!2scl"
+                            width="600" height="450" frameborder="0" style="border:0;" allowfullscreen=""
+                            aria-hidden="false" tabindex="0"></iframe>
+                    </div>
+                    <div class="sedes col-xs-12 col-sm-6">
+                        <h1>Nuestras Sedes</h1>
+                        <br>
+                        <h3>Centro Providencia</h3>
+                        <br>
+                        <h5>El Vergel #2991</h5>
+                        <div class="imagen-sede">
+                        <img src="{% static 'img/Providencia.png' %}" alt="">
+                        </div>
+                        <br>
+                        <a href="https://www.google.cl/maps/place/Edudown/@-33.4283693,-70.5913321,17z/data=!3m1!4b1!4m5!3m4!1s0x9662cf39c6654479:0x3af3ed155c8b1b93!8m2!3d-33.4283738!4d-70.5891434"
+                            class="btn-sede">Ubicación</a>
+                        <br>
+                        <br>
+                        <h3>Centro San Bernardo</h3>
+                        <br>
+                        <h5>San Martín #405</h5>
+                        <div class="imagen-sede">
+                        <img src="{% static 'img/Sanb.png' %}" alt="">
+                        </div>
+                        <br>
+                        <a href="https://www.google.cl/maps/place/Corporaci%C3%B3n+Edudown/@-33.5936691,-70.69626,17z/data=!3m1!4b1!4m5!3m4!1s0x9662d942b098c44d:0xb397459099e32254!8m2!3d-33.5936736!4d-70.6940713"
+                            class="btn-sede">Ubicación</a>
+                        <br>
+                        <br>
+                        <h3>Centro Temuco</h3>
+                        <br>
+                        <h5>San Francisco #0966</h5>
+                        <div class="imagen-sede">
+                        <img src="{% static 'img/Temuco.png' %}" alt="">
+                        </div>
+                        <br>
+                        <a href="https://www.google.cl/maps/place/Edudown+Chile+sede+Araucan%C3%ADa/@-38.7402726,-72.6180371,16z/data=!4m8!1m2!2m1!1sEdudown+universidad+0514!3m4!1s0x9614d5ae6c186a89:0xf722b0396cf1b86d!8m2!3d-38.7357051!4d-72.6171936"
+                            class="btn-sede">Ubicación</a>
+                        <br>
+                        <br>
+                        <h3>Centro La Serena</h3>
+                        <br>
+                        <h5>Av. Gabriel González Videla #1670</h5>
+                        <div class="imagen-sede">
+                        <img src="{% static 'img/LaSerena.png' %}" alt="">
+                        </div>  
+                        <br>
+                        <a href="https://www.google.cl/maps/place/Edudown+Chile+Sede+La+Serena/@-29.9170022,-71.2499621,17z/data=!3m1!4b1!4m5!3m4!1s0x9691ca5d8e68a4c9:0x8f0ec3586ae17b61!8m2!3d-29.9170069!4d-71.2477734"
+                            class="btn-sede">Ubicación</a>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="contenedor-footer">
+            <div class="content-foo">
+                <h4>Telefono</h4>
+                <h4>Correo</h4>
+            </div>
+        </div>
+        <h2 class="Titutlo final">&copy; EduDown Chile</h2>
+
+        <div class="row">
+            <div class="frase left col-xs- 12 col-sm-4">
+                <h3>Pagina Creada por IntegritySoftware</h1>
+            </div>
+            <div class="redes col-xs-12 col-sm-8">
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="https://www.instagram.com/edudownoficial/">
+                                <span>
+                                    <i class="sociales icon-instagram"></i>
+                                </span>
+                            </a>
+                            <a href="https://www.facebook.com/edudown.chile/">
+                                <span>
+                                    <i class="sociales icon-facebook"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+    </footer>
+
 </body>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 
 </html>
