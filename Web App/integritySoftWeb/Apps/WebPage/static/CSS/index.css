@@ -40,19 +40,23 @@ header{
 nav{
     text-align: right;
     padding: 30px 50px 0 0;
+    background-color: rgba(255, 39, 39, 0.876);
 }
 
 nav > a{
-    color: rgb(7, 7, 7);
+    color: rgb(255, 255, 255);
     font-weight: 300;
     text-decoration: none;
     margin-right: 10px;
+    height: 100%;
 }
 
 nav > a:hover{
     text-decoration: underline;
 }
-
+.atag{
+  cursor: pointer;
+}
 header .textos-header{
     display: flex;
     height: 430px;

@@ -9,3 +9,6 @@ def logOut(request):
 
 def home(request):
     return render(request,'index.html')
+
+def formulario(request):
+    return render(request,'sessions/formulario.html')
