@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 /**
@@ -19,6 +20,9 @@ public class StageController {
     private HashMap<String, Scene> sceneMap       = new HashMap<>();
     private HashMap<String, Parent> fxmlMap         = new HashMap<>();
     private Stage mainStage;
+    public int tipoUsuario;
+    public int idUsuario;
+    public int idCentro;
 
     /**
      * Crear una instancia de la clase, para poder identificar la
@@ -73,7 +77,22 @@ public class StageController {
      * Function para cerrar la Stage de la instancia actual.
      */
     public void stageOff(){
-        this.mainStage.close();
+        try {
+            this.mainStage.close();
+            Stage primaryStage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            AnchorPane root = loader.load(getClass().getResourceAsStream("/vistas/Login.fxml"));
+            root.getStylesheets().add(getClass().getResource("/CSS/Login.css").toExternalFo‌​rm());
+            
+            Scene scene = new Scene(root);
+            
+            primaryStage.setTitle("Bienvenido");
+            primaryStage.setScene(scene);
+            //primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(StageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public boolean searchForContent(String nombre){

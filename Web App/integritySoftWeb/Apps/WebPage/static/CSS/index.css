@@ -1,3 +1,21 @@
+/*xs----Extra small*/
+@media screen and (max-width:320px){
+}
+
+/*sm----small (landscape phones, 576px and up)*/
+@media (min-width: 577px) {
+}
+
+/*md----medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+}
+
+/*lg----large devices (desktops, 992px and up)*/
+@media (min-width: 992px) { }
+
+/*xl----Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) { }
+
 #carrusel img{
     height: 100vh;
 }
@@ -36,24 +54,6 @@ header{
     background: linear-gradient(to right, hsla(0, 0%, 97%, 0.61), hsla(0, 76%, 48%, 0.473)), url(../img/us.png); 
 
 }
-
-nav{
-    text-align: right;
-    padding: 30px 50px 0 0;
-    background-color: rgba(255, 39, 39, 0.876);
-}
-
-nav > a{
-    color: rgb(255, 255, 255);
-    font-weight: 300;
-    text-decoration: none;
-    margin-right: 10px;
-    height: 100%;
-}
-
-nav > a:hover{
-    text-decoration: underline;
-}
 .atag{
   cursor: pointer;
 }
@@ -75,9 +75,31 @@ header .textos-header{
     font-size: 50px;
     font-weight: 300;
     color: rgb(252, 247, 247);
-    margin-bottom: 15px;
-    
-    
+    margin-bottom: 15px;   
+}
+#navStatic{
+  background-color: rgba(255, 39, 39, 0.876);
+  width: 100vw;
+  z-index: 5;
+}
+#navFixed{
+  display: none;
+  background-color: rgba(255, 39, 39, 0.876);
+  width: 100vw;
+  position: fixed;
+  z-index: 5;
+}
+#upButton{
+  display: flex;
+  position: fixed;
+  z-index: 5; 
+  left: 94%;
+  top: 90%;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  padding: 0px 10px;
+  font-size: -webkit-xxx-large;
 }
 
 .contenedor-sobre-nosotros{
@@ -300,7 +322,8 @@ form{
     background-color: white;
     padding: 30px;
     margin: auto;
-    width: 700px;
+    min-width: 400px;
+    max-width: 900px;
     border-bottom: 3px;
     font-size: 25px;
 }

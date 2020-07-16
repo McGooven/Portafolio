@@ -8,8 +8,8 @@ import java.util.List;
  * @author Diego
  */
 public class Atencion {
-    private Date fechaIngreso;
-    private Date fechaTermino;
+    private String fechaIngreso;
+    private String fechaTermino;
     private Integer idAtencion;
     private Integer situacion;
     private Box boxIdBox;
@@ -35,7 +35,7 @@ public class Atencion {
         return sb.toString();
     }
 
-    public Atencion(Date fechaIngreso, Date fechaTermino, Integer idAtencion, Integer situacion, Box boxIdBox, TipoSesion tipoSesionIdTpSn, List<AtenInsu> atenInsus, List<FichaPaciente> fichaPacientes, List<PersoAten> persoAtens) {
+    public Atencion(String fechaIngreso, String fechaTermino, Integer idAtencion, Integer situacion, Box boxIdBox, TipoSesion tipoSesionIdTpSn, List<AtenInsu> atenInsus, List<FichaPaciente> fichaPacientes, List<PersoAten> persoAtens) {
         this.fechaIngreso = fechaIngreso;
         this.fechaTermino = fechaTermino;
         this.idAtencion = idAtencion;
@@ -50,19 +50,19 @@ public class Atencion {
     public Atencion() {
     }
 
-    public Date getFechaIngreso() {
+    public String getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
+    public void setFechaIngreso(String fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public Date getFechaTermino() {
+    public String getFechaTermino() {
         return fechaTermino;
     }
 
-    public void setFechaTermino(Date fechaTermino) {
+    public void setFechaTermino(String fechaTermino) {
         this.fechaTermino = fechaTermino;
     }
 

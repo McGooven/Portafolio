@@ -7,27 +7,25 @@ import java.util.List;
  * @author Diego
  */
 public class Region {
-    private Integer id;
+    private Integer idRegion;
     private String nombre;
     private List<Comuna> comunas;
 
-    public Region(Integer id, String nombre,List<Comuna> comunas) {
-        this.id = id;
+    public Region() {
+    }
+
+    public Region(Integer idRegion, String nombre, List<Comuna> comunas) {
+        this.idRegion = idRegion;
         this.nombre = nombre;
         this.comunas = comunas;
     }
-    
-    public Region(Integer id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
+
+    public Integer getIdRegion() {
+        return idRegion;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdRegion(Integer idRegion) {
+        this.idRegion = idRegion;
     }
 
     public String getNombre() {
@@ -37,7 +35,7 @@ public class Region {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
+
     public List<Comuna> getComunas() {
         return comunas;
     }
@@ -45,5 +43,5 @@ public class Region {
     public void setComunas(List<Comuna> comunas) {
         this.comunas = comunas;
     }
-    
+
 }

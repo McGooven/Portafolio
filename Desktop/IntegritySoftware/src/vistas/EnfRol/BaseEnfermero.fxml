@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXColorPicker?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.agenda.Agenda?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="980.0" stylesheets="@../../CSS/EnfermeroRol.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.EnfRol.BaseEnfermeroController">
+   <children>
+      <GridPane layoutX="-2.0" layoutY="-1.0" prefHeight="114.0" prefWidth="981.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="100.00000381469727" minHeight="10.0" prefHeight="93.33333206176758" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="57.33333206176758" minHeight="10.0" prefHeight="34.66666793823242" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label id="titleBand" prefHeight="30.0" prefWidth="981.0" text="Administrativo" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Bodoni MT" size="24.0" />
+               </font>
+            </Label>
+            <Pane id="titleBackground" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+               <children>
+                  <ImageView id="imgLogo" fitHeight="85.0" fitWidth="90.0" layoutX="29.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </Pane>
+         </children>
+      </GridPane>
+      <TabPane layoutX="2.0" layoutY="117.0" prefHeight="581.0" prefWidth="978.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Agendar sesiones">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane fx:id="grdBoxes" layoutX="4.0" layoutY="191.0" prefHeight="353.0" prefWidth="542.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label fx:id="boxId_00" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXColorPicker fx:id="colorBox_00" layoutX="144.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                    <JFXButton fx:id="boxBtn_00" layoutX="108.0" layoutY="62.0" onAction="#selectedBox" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label fx:id="boxId_01" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_01" layoutX="108.0" layoutY="62.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_01" layoutX="145.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                 <children>
+                                    <Label fx:id="boxId_02" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_02" layoutX="107.0" layoutY="62.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_02" layoutX="145.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label fx:id="boxId_03" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_03" layoutX="108.0" layoutY="61.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_03" layoutX="147.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label fx:id="boxId_04" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_04" layoutX="108.0" layoutY="62.0" prefHeight="28.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_04" layoutX="141.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label fx:id="boxId_05" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_05" layoutX="107.0" layoutY="61.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_05" layoutX="146.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label fx:id="boxId_06" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_06" layoutX="108.0" layoutY="61.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_06" layoutX="144.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label fx:id="boxId_07" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_07" layoutX="108.0" layoutY="58.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_07" layoutX="147.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label fx:id="boxId_08" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_08" layoutX="107.0" layoutY="59.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_08" layoutX="146.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                 <children>
+                                    <Label fx:id="boxId_09" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_09" layoutX="108.0" layoutY="61.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_09" layoutX="141.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <children>
+                                    <Label fx:id="boxId_10" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_10" layoutX="108.0" layoutY="63.0" prefHeight="27.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_10" layoutX="147.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                 <children>
+                                    <Label fx:id="boxId_11" layoutX="14.0" layoutY="14.0" text="Label" />
+                                    <JFXButton fx:id="boxBtn_11" layoutX="111.0" layoutY="59.0" prefHeight="31.0" prefWidth="59.0" styleClass="BoxButton" />
+                                    <JFXColorPicker fx:id="colorBox_11" layoutX="140.0" layoutY="19.0" prefHeight="25.0" prefWidth="26.0" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </GridPane>
+                        <ListView fx:id="lstInsumos" layoutX="571.0" layoutY="36.0" prefHeight="169.0" prefWidth="187.0" />
+                        <Label layoutX="571.0" layoutY="6.0" text="Insumos">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="788.0" layoutY="5.0" text="Personal &amp; asistente">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXDatePicker fx:id="dtpFecha" layoutX="74.0" layoutY="18.0" prefHeight="25.0" prefWidth="170.0" />
+                        <Label layoutX="31.0" layoutY="22.0" prefHeight="17.0" prefWidth="40.0" text="Fecha:" />
+                        <Label layoutX="5.0" layoutY="88.0" text="Tipo sesion:" />
+                        <JFXListView fx:id="lstPersonas" layoutX="790.0" layoutY="37.0" prefHeight="169.0" prefWidth="173.0" />
+                        <JFXButton fx:id="btnBuscarSesion" disable="true" layoutX="7.0" layoutY="138.0" prefHeight="33.0" prefWidth="106.0" ripplerFill="#2665da" style="-fx-background-color: #52adf7;" text="Agendar sesion" />
+                        <JFXToggleButton fx:id="tggAgendar" layoutX="177.0" layoutY="126.0" onAction="#AgendarSesion" text="Agendar" />
+                        <JFXComboBox fx:id="cmbTipo" layoutX="74.0" layoutY="84.0" prefHeight="25.0" prefWidth="165.0" />
+                        <JFXTimePicker fx:id="tmpInicio" layoutX="386.0" layoutY="18.0" prefHeight="25.0" prefWidth="148.0" />
+                        <Label layoutX="291.0" layoutY="23.0" text="Hora de inicio:" />
+                        <JFXButton id="agendaButton" fx:id="btnAgenda" buttonType="RAISED" layoutX="623.0" layoutY="356.0" prefHeight="109.0" prefWidth="300.0" text="Planificación semanal" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Monitorear sesiones">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Agenda fx:id="dayAgenda" layoutX="14.0" layoutY="75.0" prefHeight="485.0" prefWidth="331.0" />
+                        <JFXComboBox fx:id="cmbBoxes" layoutX="121.0" layoutY="32.0" prefHeight="25.0" prefWidth="131.0" />
+                        <Label layoutX="14.0" layoutY="36.0" text="Selecciona Box:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="btnIniSesion" buttonType="RAISED" layoutX="507.0" layoutY="51.0" onAction="#solicitudEnfermera" prefHeight="48.0" prefWidth="97.0" styleClass="sesionButton" text="Iniciar">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="btnTerSesion" buttonType="RAISED" layoutX="651.0" layoutY="51.0" onAction="#solicitudEnfermera" prefHeight="48.0" prefWidth="97.0" styleClass="sesionButton" text="Terminar">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="btnSuspSesion" buttonType="RAISED" layoutX="787.0" layoutY="51.0" onAction="#solicitudEnfermera" prefHeight="48.0" prefWidth="97.0" styleClass="sesionButton" text="Suspender">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="btnDayPlan" layoutX="263.0" layoutY="23.0" onAction="#RellenarAgendaDay" prefHeight="41.0" prefWidth="81.0" style="-fx-background-color: #2665da;" text="Buscar" textFill="WHITE" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

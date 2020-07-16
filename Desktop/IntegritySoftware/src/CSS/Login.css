@@ -1,0 +1,20 @@
+#AnchorPane{
+    -fx-background-color: linear-gradient(from 25% 90% to 21% 95%,rgba(38, 38, 38, 1),rgba(29, 181, 231, 1));
+}
+.lblIndicadores{
+    -fx-text-fill: rgba(255,255,255,1);
+}
+.wrongCredentialBox{
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 18, 5, 1), 10, 0.5, 0.3, 0.4);
+}
+#btnIniciar{
+    -fx-background-color: rgba(29, 181, 231, 1);
+    -fx-pref-width: 100px;
+    -fx-pref-height: 35px;
+    
+    -fx-min-width: 90px;
+    -fx-min-height: 25px;
+    
+    -fx-max-width: 110px;
+    -fx-max-height: 45px;
+}

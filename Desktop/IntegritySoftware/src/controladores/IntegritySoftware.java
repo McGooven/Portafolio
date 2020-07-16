@@ -17,6 +17,7 @@ public class IntegritySoftware extends Application {
         try {
             FXMLLoader loader = new FXMLLoader();
             AnchorPane root = loader.load(getClass().getResourceAsStream("/vistas/Login.fxml"));
+            root.getStylesheets().add(getClass().getResource("/CSS/Login.css").toExternalFo‌​rm());
             
             Scene scene = new Scene(root);
             

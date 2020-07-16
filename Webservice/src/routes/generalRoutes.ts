@@ -8,7 +8,16 @@ import {
     findAccount,
     getcentros,
     getAtenciones,
-    getCarrousel    
+    getCarrousel,
+    getMensaje,
+    Login,
+    getBoxesState,
+    getPlanification,
+    peticionEnfermera,
+    getWeekPlanification,
+    getTiposSesion,
+    getPacandPersAvailables,
+    saveAtencion
 } from "../controllers/generalController";
 import { getEmployees } from "../controllers/HRController";
 
@@ -22,8 +31,17 @@ router.post('/usuario/log/',findAccount);
 router.get('/usuario/:idUsuario',getUsuario);
 router.post('/usuario/U',updateUsuario);
 router.post('/usuario/D',deleteUsuario);
+router.post('/boxes',getBoxesState);
+router.post('/filterSesions',getPlanification);
+router.post('/peticionEnfermera', peticionEnfermera);
+router.post('/weekPlan', getWeekPlanification);
+router.post('/TPS',getTiposSesion);
+router.post('/pacPerAvailable',getPacandPersAvailables);
+router.post('/saveAtencion',saveAtencion);
 
 router.get('/web/carrousel/:nombre',getCarrousel);
+router.post('/web/recibirFormulario',getMensaje);
+router.post('/web/logear',Login);
 
 //HR routes
 router.get('/employees',getEmployees);

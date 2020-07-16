@@ -1,8 +1,9 @@
 import {Request,Response} from 'express'
 import fs from "fs";
 import path from "path";
-import { getRepository, getConnection, createQueryBuilder } from "typeorm";
-
+import Telegraf, { Context } from "telegraf";
+import commandParts  from "telegraf-command-parts";
+import { getRepository, getConnection, createQueryBuilder, Any } from "typeorm";
 import { Usuario } from "../entities/Usuario"
 import { Centro } from "../entities/Centro"
 import { Box } from "../entities/Box"
@@ -15,6 +16,30 @@ import { Direccion } from "../entities/Direccion"
 import { FichaPaciente } from "../entities/FichaPaciente"
 import { Atencion } from '../entities/Atencion';
 import { Carrousel } from "../entities/Carrousel";
+import { TipoSesion } from '../entities/TipoSesion';
+import { Console } from 'console';
+import { Insumo } from '../entities/Insumo';
+import { AtenInsu } from '../entities/AtenInsu';
+import { PersoAten } from '../entities/PersoAten';
+
+const bot = new Telegraf('1111109689:AAHodg1WH27B0vfs4F3tctOM11BeWRRcy9Y');
+bot.use(commandParts());
+bot.command('ok',async ctx => {
+    const c = ctx as any;
+    const argumentos = parseInt(c.contextState.command.args,10);
+    if(argumentos){
+        const updateBox = await getConnection()
+        .createQueryBuilder()
+        .update(Box)
+        .set({estado:'Disponible'})
+        .where("idBox = :id", { id: argumentos})
+        .execute();
+        ctx.reply('Estado del Box actualizado, gracias.')
+    }else{
+        ctx.reply('el box nro° '+argumentos+' no existe, diganos un nro° correcto por favor.')
+    }
+})
+bot.launch();
 
 //Manejo de Mantenedor de usuarios
 
@@ -101,9 +126,17 @@ export const getUsuario = async (req: Request, res: Response): Promise<Response>
 export const findAccount = async (req: Request, res: Response): Promise<Response> => {
     const usuario = await getRepository(Usuario)
     .createQueryBuilder("user")
+    .leftJoinAndSelect("user.personalIdPersonal","per")
+    .leftJoinAndSelect("per.centroIdCentro","cent")
+    .select([
+        'user.idUsuario as \"idUsuario\"',
+        'user.habilitado as \"habilitado\"',
+        'user.permisos as \"permisos\"',
+        'cent.idCentro as \"idCentro\"'
+    ])
     .where("user.correo = :correo",{"correo":req.body.correo})
     .andWhere("user.password = :pass",{"pass":req.body.password})
-    .getMany();
+    .getRawMany();
     console.log(usuario);
     return res.json(usuario);
 }
@@ -504,6 +537,429 @@ export const getcentros = async (req: Request, res: Response): Promise<Response>
     return res.json(result);
 }
 
+//ATENCIONES Y AGENDAMIENTO.
+export const getBoxesState = async(req: Request, res:Response): Promise<Response> =>{
+    var result = [] as any;
+    
+    var idCentro = req.body.idCentro;
+
+    const query = await getRepository(Box)
+    .createQueryBuilder('bx')
+    .leftJoinAndSelect('bx.centroIdCentro','cent')
+    .select()
+    .where('cent.idCentro = :idcent',{idcent : idCentro})
+    .andWhere('bx.habilitada like :h',{h:'%S%'})
+    .getMany();
+
+    result.push({boxes:query});
+
+    console.log(result);
+    return res.json(result);
+}
+
+export const getPlanification = async(req: Request, res:Response): Promise<Response> =>{
+    console.log(req.body)
+
+    const query = await getRepository(Atencion)
+    .createQueryBuilder('aten')
+    .leftJoinAndSelect('aten.boxIdBox','box')
+    .leftJoinAndSelect('aten.tipoSesionIdTpSn','tpSesi')
+    .select([
+        "box.idBox as \"idBox\"",
+        "aten.idAtencion as \"idAtencion\"",
+        "tpSesi.idTpSn as \"tipo\"",
+        "to_char(aten.fechaIngreso,'dd-mm-yyyy hh24:mi:ss') as \"fechaIngreso\"",
+        "to_char(aten.fechaTermino,'dd-mm-yyyy hh24:mi:ss') as \"fechaTermino\""
+    ])
+    .where("box.idBox = :idBox",{idBox : req.body.idBox})
+    .andWhere("aten.situacion = :A",{A : 0})
+    .getRawMany();
+
+    console.log(query);
+    return res.json(query);
+}
+
+export const peticionEnfermera = async(req: Request, res: Response): Promise<Response> =>{
+    var state = '';
+    var msg = '';
+    var conserje = false;
+    var requestOK= true;
+    switch (req.body.accion) {
+        case 'Iniciar':
+            state = 'Ocupado'
+
+            break;
+        case 'Terminar':
+            state = 'Mantencion'
+            msg = "-- Solicitud de mantención --" +"\n"+
+                            "nro. Box: "+ req.body.idBox +"\n"+
+                            "id notificante: "+ req.body.idUsuario +"\n"+
+                            "Sesion anterior: "+ req.body.nombre +"\n"+
+                            "\n"+
+                            "Favor de enviar personal lo mas pronto posible." +"\n"+
+                            "Atte. el Bot :)";
+            conserje = true;
+
+            const terminar = await getConnection()
+            .createQueryBuilder()
+            .update(Atencion)
+            .set({situacion:1})
+            .where("idAtencion = :id", { id: req.body.idAtencion })
+            .execute();
+
+            break;
+        case 'Suspender':
+            state = 'Mantencion'
+            msg = "-- Solicitud de mantención --" +"\n"+
+                            "nro. Box: "+ req.body.idBox +"\n"+
+                            "id notificante: "+ req.body.idUsuario +"\n"+
+                            "Sesion anterior: "+ req.body.nombre +"\n"+
+                            "\n"+
+                            "Favor de enviar personal lo mas pronto posible." +"\n"+
+                            "Atte. el Bot :)";
+            conserje = true;
+
+            const suspender = await getConnection()
+            .createQueryBuilder()
+            .update(Atencion)
+            .set({situacion:2})
+            .where("idAtencion = :id", { id: req.body.idAtencion })
+            .execute();
+
+            break;
+        default:
+            if(req.body.id == 'btnIniSesion'){
+                state = 'Ocupado'
+
+            }else if(req.body.id == 'btnTerSesion'){
+                state = 'Mantencion'
+                conserje = true;
+                msg = "-- Solicitud de mantención --" +"\n"+
+                                "nro. Box: "+ req.body.idBox +"\n"+
+                                "id notificante: "+ req.body.idUsuario +"\n"+
+                                "Sesion anterior: "+ req.body.nombre +"\n"+
+                                "Resolución: Terminada" +"\n"+
+                                "\n"+
+                                "Favor de enviar personal lo mas pronto posible." +"\n"+
+                                "Atte. el Bot :)";
+
+                const terminar = await getConnection()
+                .createQueryBuilder()
+                .update(Atencion)
+                .set({situacion:1})
+                .where("idAtencion = :id", { id: req.body.idAtencion })
+                .execute();
+
+            }else if (req.body.id == 'btnSuspSesion'){
+                state = 'Mantencion'
+                conserje = true;
+                msg = "-- Solicitud de mantención --" +"\n"+
+                                "nro. Box: "+ req.body.idBox +"\n"+
+                                "id notificante: "+ req.body.idUsuario +"\n"+
+                                "Sesion anterior: "+ req.body.nombre +"\n"+
+                                "Resolución: Suspendida" +"\n"+
+                                "\n"+
+                                "Favor de enviar personal lo mas pronto posible." +"\n"+
+                                "Atte. el Bot :)";
+
+                const suspender = await getConnection()
+                .createQueryBuilder()
+                .update(Atencion)
+                .set({situacion:2})
+                .where("idAtencion = :id", { id: req.body.idAtencion })
+                .execute();
+
+            }else {
+                console.log('algo va mal con los botones.')
+                requestOK = false;
+            }
+
+            break;
+    }
+
+    if (requestOK) {
+        const updateBox = await getConnection()
+        .createQueryBuilder()
+        .update(Box)
+        .set({estado:state})
+        .where("idBox = :id", { id: req.body.idBox })
+        .execute();
+
+        if (conserje) {
+            bot.telegram.sendMessage('@LimpiezaYSatinizacion',msg);
+        }
+    }
+
+    return res.json({});
+}
+
+export const getWeekPlanification = async(req: Request, res:Response): Promise<Response> =>{
+    console.log(req.body)
+
+    const query = await getRepository(Atencion)
+    .createQueryBuilder('aten')
+    .leftJoinAndSelect('aten.boxIdBox','box')
+    .leftJoinAndSelect('aten.tipoSesionIdTpSn','tpSesi')
+    .leftJoinAndSelect('box.centroIdCentro','cent')
+    .select([
+        "box.idBox as \"idBox\"",
+        "aten.idAtencion as \"idAtencion\"",
+        "tpSesi.idTpSn as \"tipo\"",
+        "to_char(aten.fechaIngreso,'dd-mm-yyyy hh24:mi:ss') as \"fechaIngreso\"",
+        "to_char(aten.fechaTermino,'dd-mm-yyyy hh24:mi:ss') as \"fechaTermino\""
+    ])
+    .where("aten.situacion = :A",{A : 0})
+    .andWhere("cent.idCentro = :B",{B : req.body.centroId})
+    .getRawMany();
+
+    console.log(query);
+    return res.json(query);
+}
+
+export const getTiposSesion = async(req: Request, res: Response): Promise<Response> =>{
+    const query = await getRepository(TipoSesion)
+    .createQueryBuilder('tps')
+    .select([
+        'tps.idTpSn as \"idTpSn\"',
+        'tps.nombreTpSn as \"nombreTpSn\"'
+    ])
+    .getRawMany();
+    return res.json(query);
+}
+
+export const getPacandPersAvailables = async(req: Request, res: Response): Promise<Response> =>{
+    var d=req.body.fechaInicio;
+    var d1=d.split(" ");
+    var date=d1[0].split("-");
+    var time=d1[1].split(":");
+    var dd=date[0];
+    var MM=date[1]-1;
+    var yyyy=date[2];
+    var hh=time[0];
+    var mi=time[1];
+    var ss=time[2];
+    var fromdt= new Date(yyyy,MM,dd,hh,mi,ss);
+
+    var fechaIngreso = fromdt;
+    var idTipoSesion = req.body.idTipoSesion;
+    var idCentro = req.body.centroId;
+    let result=[] as any;
+
+    const query = await getRepository(Personal)
+    .createQueryBuilder('per')
+    .leftJoinAndSelect('per.persoAtens','pa')
+    .leftJoinAndSelect('per.centroIdCentro','cent')
+    .leftJoinAndSelect('pa.atencionIdAtencion','aten')
+    .leftJoinAndSelect('per.espInters','esp')
+    .select([
+        "DISTINCT \"per\".pnombre||' '||\"per\".snombre||' '||\"per\".papellido||' '||\"per\".sapellido as \"nombre\"",
+        "per.rutPersonal as \"rut\""
+    ])
+    .where("(aten.situacion = :A or aten.situacion is null)",{A : 0})
+    .andWhere("esp.idEspecialidad = :idesp",{idesp : idTipoSesion})
+    .andWhere("(aten.fechaIngreso < TO_DATE(:fi,'dd/mm/yyyy hh24:mi:ss') and aten.fechaTermino < TO_DATE(:fi,'dd/mm/yyyy hh24:mi:ss'))",
+                {fi :datetoddMMyyyy_HHmiss(fechaIngreso)}
+    )
+    .andWhere('cent.idCentro = :idcent',{idcent : idCentro})
+    .getRawMany();
+
+    const query1 = await getRepository(FichaPaciente)
+    .createQueryBuilder('pac')
+    .leftJoinAndSelect('pac.centroIdCentro','cent')
+    .select([
+        "\"pac\".pnombre||' '||\"pac\".snombre||' '||\"pac\".papellido||' '||\"pac\".sapellido as \"nombre\"",
+        "pac.rutPaciente as \"rut\""
+    ])
+    .where('cent.idCentro = :idcent',{idcent : idCentro})
+    .getRawMany();
+
+    result.push({medicos:query,pacientes:query1});
+
+    return res.json(result);
+}
+
+export const saveAtencion = async(req: Request, res: Response): Promise<Response> =>{
+    console.log(req.body);
+    let body= req.body.resultados[0] as Atencion;
+    var fechaIngreso = sumarHoras(stringToDate(req.body.resultados[0].fechaIngreso),0);
+    var fechaTermino;
+    var idTipoSesion=req.body.resultados[0].tipoSesionIdTpSn as TipoSesion;
+    // var idCentro=req.body.resultados[0].boxIdBox.idCentro;
+    // var hrsExtraBool=req.body.checkExtra;
+    var rutPersonal = req.body.resultados[1].rutPersonales;
+    var rutPaciente = req.body.resultados[1].rutPaciente;
+    let insumos;
+
+    if(req.body.fechaTermino === undefined){
+        if(idTipoSesion.idTpSn == 1){
+            //kinesiología
+            fechaTermino = datetoddMMyyyy_HHmissGuiones(sumarHoras(fechaIngreso,2));
+        }else{
+            //Fonoaudiología
+            fechaTermino = datetoddMMyyyy_HHmissGuiones(sumarHoras(fechaIngreso,1));
+        }
+    }else{
+        fechaTermino = datetoddMMyyyy_HHmissGuiones(stringToDate(req.body.fechaTermino));
+    }
+
+    var pacientes= []as any;
+    pacientes= getRepository(FichaPaciente)
+    .createQueryBuilder('pac')
+    .select()
+    .where('pac.rutPaciente like :rut',{rut : '%'+rutPaciente+'%'})
+    .getMany();
+
+    body.fechaTermino=fechaTermino;
+    const atencion= await getConnection('default')
+        .createQueryBuilder()
+        .insert()
+        .into(Atencion)
+        .values({
+            fechaIngreso: () => "to_date(to_char('" + body.fechaIngreso + "'), 'dd-MM-yyyy hh24:mi:ss')",
+            fechaTermino: () => "to_date(to_char('" + body.fechaTermino + "'), 'dd-MM-yyyy hh24:mi:ss')",
+            situacion: body.situacion,
+            boxIdBox: body.boxIdBox,
+            tipoSesionIdTpSn: body.tipoSesionIdTpSn,
+            fichaPacientes: body.fichaPacientes
+        })
+        .execute();
+    // let newAtencion = await getRepository(Atencion).create(body as Atencion);
+    // newAtencion.fichaPacientes = pacientes;
+
+    console.log(atencion);
+    //const atencion = await getRepository(Atencion).save(newAtencion);
+
+    
+    var personales= []as any;
+    personales= await getRepository(Personal)
+    .createQueryBuilder('per')
+    .select()
+    .where('per.rutPersonal IN (:...ruts)',{ruts : rutPersonal})
+    .getMany();
+    for(const element of personales){
+        let personal = element as Personal;
+        const personalq=await getConnection('default')
+        .createQueryBuilder()
+        .insert()
+        .into(PersoAten)
+        .values({ 
+            idPersoAten:undefined,
+            atencionIdAtencion : atencion.identifiers[0].idAtencion,
+            personalIdPersonal: personal
+        })
+        .execute();
+    }
+
+    console.log(atencion.identifiers[0].idAtencion);
+    if(idTipoSesion.idTpSn == 1){
+        //kinesiología
+        insumos = await getRepository(Insumo).createQueryBuilder('insu')
+        .select()
+        .where('insu.idInsumo = :id',{id:1})
+        .getMany();
+        console.log(insumos);
+        for(const element of insumos){
+            let insumo =element as Insumo;
+            let cantidad;
+            if (insumo.idInsumo = 1) {
+                cantidad=5;
+            } else {
+                cantidad = 0;
+            }
+
+            const atenInsu= getConnection('default')
+            .createQueryBuilder()
+            .insert()
+            .into(AtenInsu)
+            .values({ 
+                atencionIdAtencion : atencion.identifiers[0].idAtencion,
+                cantidad : cantidad,
+                insumoIdInsumo : insumo.idInsumo 
+            })
+            .execute();
+        }
+
+    }else if(idTipoSesion.idTpSn == 3 ){
+        insumos = await getRepository(Insumo).createQueryBuilder('insu')
+        .select()
+        .where('insu.idInsumo = :id',{id:3})
+        .getMany();
+
+        console.log(insumos);
+        //Fonoaudiología
+        for(const element of insumos){
+            let insumo =element as Insumo;
+            let cantidad;
+            if (insumo.idInsumo = 3) {
+                cantidad=2;
+            } else {
+                cantidad = 0;
+            }
+
+            const atenInsu= await getConnection('default')
+            .createQueryBuilder()
+            .insert()
+            .into(AtenInsu)
+            .values({ 
+                atencionIdAtencion : atencion.identifiers[0].idAtencion,
+                cantidad : cantidad,
+                insumoIdInsumo : insumo.idInsumo 
+            })
+            .execute();
+        }
+
+    }
+    
+
+
+    return res.json({mensaje:'probando...'});
+
+}
+
+function sumarHoras(fecha : Date, horas : number) {
+    var date = new Date(fecha);
+    date.setHours(fecha.getHours() + horas);
+    return date;
+}
+function datetoddMMyyyy_HHmiss(fecha: Date){
+    var day = fecha.getDate() ;
+    var month = fecha.getMonth()+1;
+    var year = fecha.getFullYear();
+    var hours = fecha.getHours();
+    var minutes = fecha.getMinutes();
+    var seconds = fecha.getSeconds();
+
+    var formated= (day<=9 ? '0' + day : day) + '/' +(month<=9 ? '0' + month : month) +'/'+year+' '+(hours<=9 ? '0' + hours : hours)+':'+(minutes<=9 ? '0' + minutes : minutes)+':'+(seconds<=9 ? '0' + seconds : seconds);
+    return formated;
+}
+function datetoddMMyyyy_HHmissGuiones(fecha:Date) {
+    var day = fecha.getDate() ;
+    var month = fecha.getMonth()+1;
+    var year = fecha.getFullYear();
+    var hours = fecha.getHours();
+    var minutes = fecha.getMinutes();
+    var seconds = fecha.getSeconds();
+
+    var formated= (day<=9 ? '0' + day : day) + '-' +(month<=9 ? '0' + month : month) +'-'+year+' '+(hours<=9 ? '0' + hours : hours)+':'+(minutes<=9 ? '0' + minutes : minutes)+':'+(seconds<=9 ? '0' + seconds : seconds);
+    return formated;
+}
+
+function stringToDate(param) {
+    console.log(param);
+    var d=param;
+    var d1=d.split(" ");
+    var date=d1[0].split("-");
+    var time=d1[1].split(":");
+    var dd=date[0];
+    var MM=date[1]-1;
+    var yyyy=date[2];
+    var hh=time[0];
+    var mi=time[1];
+    var ss=time[2];
+
+    return new Date(yyyy,MM,dd,hh,mi,ss);
+}
+
 //Web Page
 export const getCarrousel = async(req: Request, res: Response): Promise<Response> =>{
     const imagen = await getRepository(Carrousel).findOne({idImg:req.params.nombre as any});
@@ -511,4 +967,29 @@ export const getCarrousel = async(req: Request, res: Response): Promise<Response
         res.sendFile(path.join(__dirname,'../../Media/'+imagen.img));
     }
     return res;
+}
+
+export const getMensaje = async(req: Request, res: Response): Promise<Response> =>{
+    console.log(req.body);
+    const mensaje = "-- Formulario recibido --" +"\n"+
+                    "Nombre: "+ req.body.nombre +"\n"+
+                    "Email: "+ req.body.email +"\n"+
+                    "Telefono: "+ req.body.telefono +"\n"+
+                    "mensaje: "+ req.body.mensaje +"\n"+
+                    "\n"+
+                    "Favor de contestarle lo mas pronto posible." +"\n"+
+                    "Atte. el Bot :)";
+    bot.telegram.sendMessage('@EduDownTestForm',mensaje);
+    return res.json({});
+}
+
+export const Login = async(req: Request, res: Response): Promise<Response> =>{
+    console.log(req.body)
+    const query = await getRepository(Usuario).findOne({correo : req.body.email, password : req.body.pass});
+    if (query) {
+        return res.json(query);
+    } else {
+        return res.status(404).json({msg:'usuario no encontrado'});
+    }
+
 }

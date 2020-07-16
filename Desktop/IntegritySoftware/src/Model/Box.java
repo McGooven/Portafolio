@@ -10,6 +10,7 @@ public class Box {
     private Integer idBox;
     private String habilitada;
     private String estado;
+    private Centro centroIdCentro;
     private List<Atencion> atencions;
 
     @Override
@@ -34,8 +35,6 @@ public class Box {
         this.atencions = atencions;
         this.centroIdCentro = centroIdCentro;
     }
-    
-    private Centro centroIdCentro;
 
     public Integer getIdBox() {
         return idBox;

@@ -142,7 +142,7 @@
             </GridPane>
             <Separator layoutX="10.0" layoutY="518.0" prefWidth="200.0" />
             <Label layoutX="89.0" layoutY="522.0" text="Laboral" />
-            <GridPane layoutX="8.0" layoutY="544.0" prefHeight="244.0" prefWidth="200.0" vgap="7.0">
+            <GridPane layoutX="8.0" layoutY="544.0" prefHeight="260.0" prefWidth="200.0" vgap="7.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -153,41 +153,48 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
                      <children>
-                        <TextField fx:id="txtTitulo" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" />
+                        <TextField fx:id="txtTitulo" layoutY="13.0" prefHeight="25.0" prefWidth="200.0" />
                         <Label layoutY="-3.0" text="Título" />
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                      <children>
-                        <TextField fx:id="txtCasaEstudio" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" />
+                        <TextField fx:id="txtCasaEstudio" layoutY="13.0" prefHeight="25.0" prefWidth="200.0" />
                         <Label layoutY="-3.0" text="Casa de estudio" />
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                      <children>
-                        <DatePicker fx:id="dtpFechaEgreso" layoutY="20.0" prefHeight="25.0" prefWidth="144.0" />
+                        <DatePicker fx:id="dtpFechaEgreso" layoutY="16.0" prefHeight="17.0" prefWidth="144.0" />
                         <Label layoutY="-3.0" text="Fecha de egreso" />
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                      <children>
-                        <HBox layoutY="19.0" prefHeight="25.0" prefWidth="159.0">
+                        <HBox layoutY="16.0" prefHeight="17.0" prefWidth="159.0">
                            <children>
-                              <TextField fx:id="txtFilePath" prefHeight="25.0" prefWidth="104.0" />
+                              <TextField fx:id="txtFilePath" prefHeight="29.0" prefWidth="103.0" />
                               <Button fx:id="btnFileCertificado" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Archivo" />
                            </children>
                         </HBox>
                         <Label layoutY="-3.0" text="Certificado" />
                      </children>
                   </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                     <children>
+                        <ComboBox fx:id="cmbBCargo" layoutY="15.0" prefHeight="17.0" prefWidth="199.0" />
+                        <Label layoutY="-3.0" text="Cargo en Edudown" />
+                     </children>
+                  </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
                      <children>
-                        <ComboBox fx:id="cmbBCargo" layoutY="18.0" prefHeight="25.0" prefWidth="199.0" />
-                        <Label layoutY="-3.0" text="Cargo en Edudown" />
+                        <ComboBox fx:id="cmbBSede" layoutY="12.0" prefHeight="25.0" prefWidth="150.0" />
+                        <Label layoutY="-4.0" prefHeight="17.0" prefWidth="44.0" text="Sede" />
                      </children>
                   </Pane>
                </children>
